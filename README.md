@@ -1,34 +1,42 @@
 # static_ffmpeg
 
+
+## Version
 FFMPEG Version: 4.4
+
+## About
 
 Problem: You develop on Windows/MacOS/Linux. You want an ffmpeg
 that works on all the platforms but now you have to go and special
 case your program installation to handle each platforms ability
-to get the ffmpeg download.
+to get the ffmpeg download. For example:
+  * Win32: download binary
+  * MacOS: `brew install ffmpeg`
+  * Linux: `sudo apt-get install ffmpeg`
 
-This tool is designed to make this easier, as easy as doing
-`pip install .` and then running `static_ffmpeg --version` to test this out.
+If you want to be able to quitely (re)install a python package silently and
+automatically using ffmpeg, well you are out of luck... until now.
 
-At this first launch, this program only supports Win32 (the motivation
-for this project) but other platforms will be supported as well.
+To use simply do `pip install static_ffmpeg` and then after this is done you
+can try running `static_ffmpeg -version` to test out that the version has been
+installed.
 
-A note about Win32: we are using a pre-built binary and it may go
-stale. Feel free to fork this package up and update the ffmpeg, run
-tox and then do a pull request on this package.
-
-Once this package is installed, the static_ffmpeg command will
+Once this package is installed, the `static_ffmpeg` command will
 be available. This command simply passes all arguments to
 a real ffmpeg. Call static_ffmpeg like you would call ffmpeg in your project
 and it should just work.
 
-# Binary source
+## Warning - Big
+  * All three binaries for Win32/OSX/Linux ffmpeg are included. Though if you 
+    need ffmpeg then you probably have a large disk anyway.
+
+## Binary source
   * MacOS (Intel): https://evermeet.cx/pub/ffmpeg/
   * MacOS (Arm): TODO: https://osxexperts.net/
   * Windows: (My computer download)
   * Linux: https://johnvansickle.com/ffmpeg/
 
-# Testing
+## Testing
 
   * Clone this project `git clone https://github.com/zackees/static_ffmpeg`
   * Then setup the virtual env using the script `python virtualenvsetup.py`
