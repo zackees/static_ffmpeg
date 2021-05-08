@@ -1,5 +1,7 @@
 # pyffmpeg
 
+FFMPEG Version: 4.4
+
 Problem: You develop on Windows/MacOS/Linux. You want an ffmpeg
 that works on all the platforms but now you have to go and special
 case your program installation to handle each platforms ability
@@ -19,6 +21,12 @@ Once this package is installed, the pyffmpeg command will
 be available. This command simply passes all arguments to
 a real ffmpeg. Call pyffmpeg like you would call ffmpeg in your project
 and it should just work.
+
+# Binary source
+  * MacOS (Intel): https://evermeet.cx/pub/ffmpeg/
+  * MacOS (Arm): TODO: https://osxexperts.net/
+  * Windows: ??
+  * Linux: https://johnvansickle.com/ffmpeg/
 
 # Testing
 
