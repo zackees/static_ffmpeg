@@ -22,4 +22,12 @@ and it should just work.
 
 # Testing
 
-  * After cloning this project, cd into the main directory and run `tox`
+  * Clone this project `git clone https://github.com/zackees/pyffmpeg`
+  * Then setup the virtual env using the script `python virtualenvsetup.py`
+  * Then activate `. venv/bin/activate`
+  * Then run tox `tox`
+
+## Testing work arounds
+  * You may get an error like 'Interpretor not found'
+    * The solution it install the python interpretor of this type, like so
+      * https://www.python.org/downloads/release/python-3810/
