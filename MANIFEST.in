@@ -1,2 +1,3 @@
 include pyffmpeg/win32/ffmpeg.exe
 include pyffmpeg/linux/ffmpeg
+include pyffmpeg/macos_x64/ffmpeg
