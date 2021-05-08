@@ -7,13 +7,13 @@ from setuptools import find_packages, setup, Command
 # The directory containing this file
 HERE = os.path.dirname(__file__)
 
-NAME = 'static-ffmpeg'
+NAME = 'static_ffmpeg'
 DESCRIPTION = 'Cross platform ffmpeg to work on various systems.'
 URL = 'https://github.com/zackees/static_ffmpeg'
 EMAIL = 'dont@email.me'
 AUTHOR = 'Zach Vorhies'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.0.1'
+VERSION = '1.0.0'
 
 # The text of the README file
 with open(os.path.join(HERE, "README.md")) as fd:
