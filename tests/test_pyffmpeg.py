@@ -32,8 +32,7 @@ class PyFFMPEGTester(unittest.TestCase):
         run.get_platform_executable_or_raise()
 
     def test_run_pyffmpeg(self) -> None:
-        cmd = f'pyffmpeg -version'
-        subprocess.check_output(cmd)
+        subprocess.check_output(['pyffmpeg', '-version'])
 
 
 if __name__ == '__main__':
