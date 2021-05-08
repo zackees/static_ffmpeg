@@ -71,8 +71,8 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.9",
         "Operating System :: Microsoft :: Windows",
-        #"Operating System :: POSIX",
-        #"Operating System :: MacOS :: MacOS X",
+        "Operating System :: POSIX",
+        "Operating System :: MacOS :: MacOS X",
         "Environment :: Console",
     ],
     
