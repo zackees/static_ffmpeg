@@ -25,7 +25,7 @@ and it should just work.
 # Binary source
   * MacOS (Intel): https://evermeet.cx/pub/ffmpeg/
   * MacOS (Arm): TODO: https://osxexperts.net/
-  * Windows: ??
+  * Windows: (My computer download)
   * Linux: https://johnvansickle.com/ffmpeg/
 
 # Testing
