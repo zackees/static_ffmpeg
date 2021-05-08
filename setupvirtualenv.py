@@ -6,7 +6,7 @@ def _exe(cmd):
     os.system(cmd)
 
 HERE = os.path.dirname(__file__)
-os.chdir(HERE)
+os.chdir(os.path.abspath(HERE))
 
 if not os.path.exists('venv'):
     _exe(f'virtualenv -p python3 venv')
