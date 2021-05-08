@@ -15,6 +15,8 @@ def get_platform_executable_or_raise():
     """Either get the executable or raise an error"""
     if sys.platform == "win32":
         return os.path.join(PCKG_PATH, "win32", "ffmpeg.exe")
+    if sys.platform == "linux":
+        return os.path.join(PCKG_PATH, "linux", "ffmpeg")
     raise OSError(f"Please implement pyffmpeg for {sys.platform}")
 
 
