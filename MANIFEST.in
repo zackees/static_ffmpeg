@@ -1,1 +1,2 @@
-recursive-include pyffmpeg ffmpeg.exe
+include pyffmpeg/win32/ffmpeg.exe
+include pyffmpeg/linux/ffmpeg
