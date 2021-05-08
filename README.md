@@ -31,3 +31,7 @@ and it should just work.
   * You may get an error like 'Interpretor not found'
     * The solution it install the python interpretor of this type, like so
       * https://www.python.org/downloads/release/python-3810/
+  * Ubuntu: `ModuleNotFoundError: No module named 'virtualenv.seed.via_app_data'
+    * Uninstall the pip on your system and reinstall:
+      * `pip3 uninstall virtualenv`
+      * `pip3 install virtualenv`
