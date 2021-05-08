@@ -1,3 +1,8 @@
+## Quick install
+# cd <YOUR DIRECTORY>
+# Download: curl -X GET https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py | python
+# Then: . venv/bin/activate
+
 import os
 import sys
 
@@ -22,6 +27,3 @@ else:
     print(f'{os.path.abspath("venv")} already exists')
 
 print(f'Now use ". venv/bin/activate" to enter into the environment.')
-
-
-    
