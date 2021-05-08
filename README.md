@@ -17,6 +17,13 @@ to get the ffmpeg download. For example:
 If you want to be able to quitely (re)install a python package silently and
 automatically using ffmpeg, well you are out of luck... until now.
 
+## Pre-installation (optional)
+
+To easily setup a virtual environment, please see this installation script:
+https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
+
+## Installation
+
 To use simply do `pip install static_ffmpeg` and then after this is done you
 can try running `static_ffmpeg -version` to test out that the version has been
 installed.
@@ -27,6 +34,7 @@ a real ffmpeg. Call static_ffmpeg like you would call ffmpeg in your project
 and it should just work.
 
 ## Warning - Big
+
   * All three binaries for Win32/OSX/Linux ffmpeg are included. Though if you 
     need ffmpeg then you probably have a large disk anyway.
 
