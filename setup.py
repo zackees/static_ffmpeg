@@ -7,9 +7,9 @@ from setuptools import find_packages, setup, Command
 # The directory containing this file
 HERE = os.path.dirname(__file__)
 
-NAME = 'pyffmpeg'
-DESCRIPTION = 'Cross platform pyffmepg to work on various systems.'
-URL = 'https://github.com/zackees/pyffmpeg'
+NAME = 'static-ffmpeg'
+DESCRIPTION = 'Cross platform ffmpeg to work on various systems.'
+URL = 'https://github.com/zackees/static_ffmpeg'
 EMAIL = 'dont@email.me'
 AUTHOR = 'Zach Vorhies'
 REQUIRES_PYTHON = '>=3.6.0'
@@ -81,7 +81,7 @@ setup(
 
     entry_points = {
         'console_scripts': [
-            'pyffmpeg = pyffmpeg.run:main',
+            'static_ffmpeg = static_ffmpeg.run:main',
         ],              
     },
     
