@@ -55,12 +55,6 @@ class UploadCommand(Command):
 
         sys.exit()
 
-#HERE = os.path.dirname(__file__)
-found_packages = find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"])
-#sys.stderr.write(f'Found packages {packages}\n')
-
-
-# This call to setup() does all the work
 setup(
     name=NAME,
     python_requires=REQUIRES_PYTHON,
@@ -74,8 +68,8 @@ setup(
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.9",
         "Operating System :: Microsoft :: Windows",
         #"Operating System :: POSIX",
         #"Operating System :: MacOS :: MacOS X",
@@ -91,10 +85,8 @@ setup(
         ],              
     },
     
-    packages=found_packages,
+    packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     package_data={
-    	'pyffmpeg': ['pyffmpeg/ffmpeg.exe'],
-    	#"": ["*.exe"],
     },
     include_package_data=True,
     extras_require={},
