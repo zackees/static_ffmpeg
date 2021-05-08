@@ -33,7 +33,7 @@ class PyFFMPEGTester(unittest.TestCase):
 
     def test_run_pyffmpeg(self) -> None:
         cmd = f'pyffmpeg -version'
-        subprocess.check_output(cmd, shell=True)
+        subprocess.check_output(cmd)
 
 
 if __name__ == '__main__':
