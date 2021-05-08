@@ -1,4 +1,4 @@
-# pyffmpeg
+# static_ffmpeg
 
 FFMPEG Version: 4.4
 
@@ -8,7 +8,7 @@ case your program installation to handle each platforms ability
 to get the ffmpeg download.
 
 This tool is designed to make this easier, as easy as doing
-`pip install .` and then running `pyffmpeg --version` to test this out.
+`pip install .` and then running `static_ffmpeg --version` to test this out.
 
 At this first launch, this program only supports Win32 (the motivation
 for this project) but other platforms will be supported as well.
@@ -17,9 +17,9 @@ A note about Win32: we are using a pre-built binary and it may go
 stale. Feel free to fork this package up and update the ffmpeg, run
 tox and then do a pull request on this package.
 
-Once this package is installed, the pyffmpeg command will
+Once this package is installed, the static_ffmpeg command will
 be available. This command simply passes all arguments to
-a real ffmpeg. Call pyffmpeg like you would call ffmpeg in your project
+a real ffmpeg. Call static_ffmpeg like you would call ffmpeg in your project
 and it should just work.
 
 # Binary source
@@ -30,7 +30,7 @@ and it should just work.
 
 # Testing
 
-  * Clone this project `git clone https://github.com/zackees/pyffmpeg`
+  * Clone this project `git clone https://github.com/zackees/static_ffmpeg`
   * Then setup the virtual env using the script `python virtualenvsetup.py`
   * Then activate `. venv/bin/activate`
   * Then run tox `tox`
