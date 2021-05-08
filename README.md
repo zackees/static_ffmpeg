@@ -24,7 +24,7 @@ https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
 
 ## Installation
 
-To use simply do `pip install static_ffmpeg` and then after this is done you
+To use simply do `pip install static-ffmpeg` and then after this is done you
 can try running `static_ffmpeg -version` to test out that the version has been
 installed.
 
