@@ -18,7 +18,7 @@ def get_platform_executable_or_raise():
     if sys.platform == "linux":
         return os.path.join(PCKG_PATH, "linux", "ffmpeg")
     if sys.platform == 'darwin':
-        return os.lpath.join(PCKG_PATH, "macos_x64", "ffmpeg")
+        return os.path.join(PCKG_PATH, "macos_x64", "ffmpeg")
     raise OSError(f"Please implement pyffmpeg for {sys.platform}")
 
 
