@@ -1,3 +1,6 @@
+
+[![Actions Status](https://github.com/zackees/static_ffmpeg/workflows/Test/badge.svg)](https://github.com/zackees/static_ffmpeg/workflows/Test/badge.svg)
+
 # static_ffmpeg
 
 
