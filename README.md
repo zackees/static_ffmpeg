@@ -1,5 +1,5 @@
 
-[![Actions Status](https://github.com/zackees/static_ffmpeg/workflows/Test/badge.svg)](https://github.com/zackees/static_ffmpeg/workflows/Test/badge.svg)
+[![Actions Status](https://github.com/zackees/static_ffmpeg/workflows/Test/badge.svg)](https://github.com/zackees/static_ffmpeg/actions)
 
 # static_ffmpeg
 
