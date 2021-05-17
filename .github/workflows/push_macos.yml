@@ -1,4 +1,4 @@
-name: Test
+name: MacOS_Tests
 
 on: [push]
 
@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.9]
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
