@@ -29,7 +29,7 @@ def main():
     str_args = " ".join(sys.argv[1:])
     if sys.platform != 'win32':
         if not os.access(ffmpeg_exe, os.X_OK):
-            mode = stat.S_IXOTH | stat.S_IXUSR | stat.IXGRP
+            mode = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
             os.chmod(ffmpeg_exe, mode)
             assert os.access(ffmpeg_exe, os.X_OK), f'Could not execute {ffmpeg_exe}'
     cmd = f"{ffmpeg_exe} {str_args}"
