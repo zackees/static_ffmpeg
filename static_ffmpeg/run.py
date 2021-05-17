@@ -26,7 +26,7 @@ def main():
     """Entry point for running static_ffmpeg, which delegates to ffmpeg."""
     ffmpeg_exe = get_platform_executable_or_raise()
     str_args = " ".join(sys.argv[1:])
-    if os.platform != 'win32':
+    if sys.platform != 'win32':
         assert os.access(ffmpeg_exe, os.X_OK)
     cmd = f"{ffmpeg_exe} {str_args}"
     rtn = os.system(cmd)
