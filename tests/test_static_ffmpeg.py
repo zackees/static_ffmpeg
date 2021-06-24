@@ -11,6 +11,9 @@ class static_ffmpegTester(unittest.TestCase):
     def test_platform_executable(self) -> None:
         run.get_platform_executable_or_raise()
 
+    def test_no_fix_permissions(self) -> None:
+        run.get_platform_executable_or_raise(False)
+
     def test_run_static_ffmpeg(self) -> None:
         subprocess.check_output(['static_ffmpeg', '-version'])
 
