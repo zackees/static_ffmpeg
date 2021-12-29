@@ -13,7 +13,7 @@ URL = 'https://github.com/zackees/static_ffmpeg'
 EMAIL = 'dont@email.me'
 AUTHOR = 'Zach Vorhies'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '1.0.9'
+VERSION = '1.0.10'
 
 # The text of the README file
 with open(os.path.join(HERE, "README.md")) as fd:
@@ -55,6 +55,7 @@ class UploadCommand(Command):
 
         sys.exit()
 
+
 setup(
     name=NAME,
     python_requires=REQUIRES_PYTHON,
@@ -75,19 +76,18 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Environment :: Console",
     ],
-    
+
     install_requires=[
     ],
 
-    entry_points = {
+    entry_points={
         'console_scripts': [
             'static_ffmpeg = static_ffmpeg.run:main',
-        ],              
+        ],
     },
-    
+
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
-    package_data={
-    },
+    package_data={},
     include_package_data=True,
     extras_require={
         "test": ["pytest", "black"],
