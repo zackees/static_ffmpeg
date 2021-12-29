@@ -23,10 +23,17 @@ def get_platform_executable_or_raise(fix_permissions=True):
     else:
         raise OSError(f"Please implement static_ffmpeg for {sys.platform}")
 
-    if fix_permissions and sys.platform != 'win32' and not os.access(ffmpeg_exe, os.X_OK):
-        mode = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
-        os.chmod(ffmpeg_exe, mode)
-        assert os.access(ffmpeg_exe, os.X_OK), f'Could not execute {ffmpeg_exe}'
+    if (
+        fix_permissions
+        and sys.platform != "win32"
+        and (not os.access(ffmpeg_exe, os.X_OK) or not os.access(ffmpeg_exe, os.R_OK))
+    ):
+        # Set bits for execution and read for all users.
+        exe_bits = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
+        read_bits = stat.S_IRUSR | stat.S_IRGRP | stat.S_IXGRP
+        os.chmod(ffmpeg_exe, exe_bits | read_bits)
+        assert os.access(ffmpeg_exe, os.X_OK), f"Could not execute {ffmpeg_exe}"
+        assert os.access(ffmpeg_exe, os.R_OK), f"Could not get read of {ffmpeg_exe}"
     return ffmpeg_exe
 
 
