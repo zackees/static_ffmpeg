@@ -3,6 +3,7 @@ import subprocess
 
 from static_ffmpeg import run
 
+
 class static_ffmpegTester(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
