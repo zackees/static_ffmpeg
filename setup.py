@@ -13,7 +13,7 @@ URL = 'https://github.com/zackees/static_ffmpeg'
 EMAIL = 'dont@email.me'
 AUTHOR = 'Zach Vorhies'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '1.0.13'
+VERSION = '1.0.14'
 
 # The text of the README file
 with open(os.path.join(HERE, "README.md")) as fd:
@@ -44,7 +44,7 @@ class UploadCommand(Command):
             pass
 
         self.status('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        os.system('"{0}" setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
         self.status('Uploading the package to PyPI via Twine…')
         os.system('twine upload dist/*')

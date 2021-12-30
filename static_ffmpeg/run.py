@@ -7,19 +7,17 @@ import os
 import stat
 import sys
 
-import static_ffmpeg
-
-PCKG_PATH = static_ffmpeg.__path__[0]  # type: ignore  # mypy issue #1422
+SELF_DIR = os.path.dirname(__file__)
 
 
 def get_platform_executable_or_raise(fix_permissions=True):
     """Either get the executable or raise an error"""
     if sys.platform == "win32":
-        ffmpeg_exe = os.path.join(PCKG_PATH, "win32", "ffmpeg.exe")
+        ffmpeg_exe = os.path.join(SELF_DIR, "win32", "ffmpeg.exe")
     elif sys.platform == "linux":
-        ffmpeg_exe = os.path.join(PCKG_PATH, "linux", "ffmpeg")
+        ffmpeg_exe = os.path.join(SELF_DIR, "linux", "ffmpeg")
     elif sys.platform == "darwin":
-        ffmpeg_exe = os.path.join(PCKG_PATH, "macos_x64", "ffmpeg")
+        ffmpeg_exe = os.path.join(SELF_DIR, "macos_x64", "ffmpeg")
     else:
         raise OSError(f"Please implement static_ffmpeg for {sys.platform}")
 
