@@ -15,7 +15,7 @@ Problem: You develop on Windows/MacOS/Linux. You want an ffmpeg
 that works on all the platforms but now you have to go and special
 case your program installation to handle each platforms ability
 to get the ffmpeg download. For example:
-  * Win32: download binary
+  * Win32: `choco install ffmpeg'
   * MacOS: `brew install ffmpeg`
   * Linux: `sudo apt-get install ffmpeg`
 
