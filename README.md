@@ -36,12 +36,15 @@ installed.
 Once this package is installed, the `static_ffmpeg` command will
 be available. This command simply passes all arguments to
 a real ffmpeg. Call static_ffmpeg like you would call ffmpeg in your project
-and it should just work.
+and it should just work, or bypass the stub and use the ffmpeg directly by getting
+the path via `run.get_platform_executable_or_raise()`
 
 ## Warning - Big
 
   * All three binaries for Win32/OSX/Linux ffmpeg are included. Though if you 
     need ffmpeg then you probably have a large disk anyway.
+  * TODO: Include ffprobe
+  * TODO: Zip up file to reduce space
 
 ## Binary source
   * MacOS (Intel): https://evermeet.cx/pub/ffmpeg/
