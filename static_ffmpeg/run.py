@@ -45,7 +45,7 @@ def get_platform_executables_or_raise(fix_permissions=True):
             # Set bits for execution and read for all users.
             exe_bits = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
             read_bits = stat.S_IRUSR | stat.S_IRGRP | stat.S_IXGRP
-            os.chmod(ffmpeg_exe, exe_bits | read_bits)
+            os.chmod(exe, exe_bits | read_bits)
             assert os.access(exe, os.X_OK), f"Could not execute {exe}"
             assert os.access(
                 exe, os.R_OK
