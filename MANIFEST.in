@@ -1,1 +1,3 @@
-include static_ffmpeg/archive.zip
+include static_ffmpeg/darwin.zip
+include static_ffmpeg/win32.zip
+include static_ffmpeg/linux.zip

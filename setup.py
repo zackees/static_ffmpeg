@@ -13,7 +13,7 @@ URL = "https://github.com/zackees/static_ffmpeg"
 EMAIL = "dont@email.me"
 AUTHOR = "Zach Vorhies"
 REQUIRES_PYTHON = ">=3.6.0"
-VERSION = "1.0.14"
+VERSION = "2.0.0"
 
 # The text of the README file
 with open(os.path.join(HERE, "README.md")) as fd:

@@ -24,8 +24,9 @@ def get_platform_executable_or_raise(fix_permissions=True):
     """Either get the executable or raise an error"""
     exe_dir = get_platform_dir()
     if not os.path.exists(exe_dir):
-        with zipfile.ZipFile(ARCHIVE_ZIP, "r") as zip_ref:
-            zip_ref.extractall(SELF_DIR)
+        zip_file = f"{sys.platform}.zip"
+        with zipfile.ZipFile(zip_file, "r") as zipf:
+            zipf.extractall(SELF_DIR)
 
     ffmpeg_exe = os.path.join(exe_dir, "ffmpeg")
     if sys.platform == "win32":
