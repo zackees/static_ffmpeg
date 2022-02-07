@@ -71,3 +71,11 @@ the path via `run.get_platform_executables_or_raise()`
     * Uninstall the pip on your system and reinstall:
       * `pip3 uninstall virtualenv`
       * `pip3 install virtualenv`
+
+## Release History
+  * 2.0:
+    * ffmpeg upgraded to 5.0
+    * added ffprobe (static_ffprobe or get run.get_platform_executables_or_raise() to get the binary location)
+    * now uses compression to reduce install size
+  * 1.0:
+    * ffmpeg 4.4 released + tests
