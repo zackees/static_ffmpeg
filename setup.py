@@ -17,7 +17,7 @@ VERSION = "2.0.0"
 
 # The text of the README file
 with open(os.path.join(HERE, "README.md")) as fd:
-    README = fd.read()
+    LONG_DESCRIPTION = fd.read()
 
 
 class UploadCommand(Command):
@@ -61,7 +61,7 @@ setup(
     python_requires=REQUIRES_PYTHON,
     version=VERSION,
     description=DESCRIPTION,
-    long_description=README,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url=URL,
     author="Zach Vorhies",
@@ -76,7 +76,7 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Environment :: Console",
     ],
-    install_requires=[],
+    install_requires=['py7zr'],
     entry_points={
         "console_scripts": [
             "static_ffmpeg = static_ffmpeg.run:main_static_ffmpeg",
@@ -87,7 +87,7 @@ setup(
     package_data={},
     include_package_data=True,
     extras_require={
-        "test": ["pytest", "black"],
+        "test": ["pytest"],
     },
     cmdclass={
         "upload": UploadCommand,

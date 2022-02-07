@@ -1,3 +1,1 @@
-include static_ffmpeg/darwin.zip
-include static_ffmpeg/win32.zip
-include static_ffmpeg/linux.zip
+incldue static_ffmpeg/archive.7z
