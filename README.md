@@ -48,7 +48,17 @@ the path via `run.get_platform_executables_or_raise()`
 ## Updating binaries
 
   * Zip up folders darwin/linux/win32 into the darwin/linux/win32.zip archives
-  prior to release.
+  prior to release. They must be < 100MB or else PYIP won't accept it. So compression
+  matters.
+    * To make archive:
+      * (Win32) select darwin/linux/win32 and right click 7z -> "add to archive"
+        * Assumes you've installed 7z archiver for windows
+      * format: 7z
+      * Compression Level: Ultra
+      * Compression Method: LZMA2
+      * Dictionary Size: 1024
+      * Word Size 64
+      * Solid Block Size 512MB
 
 ## Binary source
 

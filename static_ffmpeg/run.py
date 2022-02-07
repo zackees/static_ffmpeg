@@ -6,7 +6,7 @@
 import os
 import stat
 import sys
-import zipfile
+import py7zr  # type: ignore
 
 SELF_DIR = os.path.dirname(__file__)
 ARCHIVE_ZIP = os.path.join(SELF_DIR, "archive.zip")
@@ -24,9 +24,10 @@ def get_platform_executables_or_raise(fix_permissions=True):
     """Either get the executable or raise an error"""
     exe_dir = get_platform_dir()
     if not os.path.exists(exe_dir):
-        zip_file = os.path.abspath(os.path.join(SELF_DIR, f"{sys.platform}.zip"))
-        with zipfile.ZipFile(zip_file, "r") as zipf:
-            zipf.extractall(SELF_DIR)
+        # zip_file = os.path.abspath(os.path.join(SELF_DIR, f"{sys.platform}.zip"))
+        archive_7z = os.path.abspath(os.path.join(SELF_DIR, "archive.7z"))
+        with py7zr.SevenZipFile(archive_7z, mode='r') as _7zfile:
+            _7zfile.extractall()
 
     ffmpeg_exe = os.path.join(exe_dir, "ffmpeg")
     ffprobe_exe = os.path.join(exe_dir, "ffprobe")
