@@ -31,25 +31,24 @@ https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
 ## Installation
 
 To use simply do `pip install static-ffmpeg` and then after this is done you
-can try running `static_ffmpeg -version` to test out that the version has been
-installed.
+can try running `static_ffmpeg -version` and/or `static_ffprobe` to test out
+that the version has been installed.
 
-Once this package is installed, the `static_ffmpeg` command will
-be available. This command simply passes all arguments to
-a real ffmpeg. Call static_ffmpeg like you would call ffmpeg in your project
-and it should just work, or bypass the stub and use the ffmpeg directly by getting
-the path via `run.get_platform_executable_or_raise()`
+Once this package is installed, the `static_ffmpeg` and `static_ffprobe` command
+will be available. This command simply passes all arguments to
+a real ffmpeg/ffprobe. Call static_ffmpeg like you would call ffmpeg in your project
+and it should just work, or bypass the stub and use the ffmpeg/ffprobe directly by getting
+the path via `run.get_platform_executables_or_raise()`
 
 ## Warning - Big
 
-  * All three binaries for Win32/OSX/Linux ffmpeg are included. Though if you 
+  * All three binaries for Win32/darwin/linux ffmpeg are included. Though if you 
     need ffmpeg then you probably have a large disk anyway.
-  * TODO: Include ffprobe
-
 
 ## Updating binaries
 
-  * Zip up folders darwin/linux/win32 into archive.zip prior to release.
+  * Zip up folders darwin/linux/win32 into the darwin/linux/win32.zip archives
+  prior to release.
 
 ## Binary source
 

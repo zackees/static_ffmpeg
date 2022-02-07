@@ -79,7 +79,8 @@ setup(
     install_requires=[],
     entry_points={
         "console_scripts": [
-            "static_ffmpeg = static_ffmpeg.run:main",
+            "static_ffmpeg = static_ffmpeg.run:main_static_ffmpeg",
+            "static_ffprobe = static_ffmpeg.run:main_static_ffprobe",
         ],
     },
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
