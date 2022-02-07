@@ -16,15 +16,16 @@ def _exe(cmd):
 HERE = os.path.dirname(__file__)
 os.chdir(os.path.abspath(HERE))
 
-if not os.path.exists('venv'):
-    _exe('virtualenv -p python3 venv')
+if not os.path.exists("venv"):
+    _exe("virtualenv -p python3 venv")
     # Linux/MacOS uses bin and Windows uses Script, so create
     # a soft link in order to always refer to bin for all
     # platforms.
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         import _winapi
-        target = os.path.join(HERE, 'venv', 'Scripts')
-        link = os.path.join(HERE, 'venv', 'bin')
+
+        target = os.path.join(HERE, "venv", "Scripts")
+        link = os.path.join(HERE, "venv", "bin")
         _winapi.CreateJunction(os.path.abspath(target), link)
 else:
     print(f'{os.path.abspath("venv")} already exists')

@@ -24,14 +24,17 @@ class static_ffmpegTester(unittest.TestCase):
         mode = os.stat(ffmpeg_exe).st_mode
         exe_bits = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
         read_bits = stat.S_IRUSR | stat.S_IRGRP | stat.S_IXGRP
-        self.assertEqual(exe_bits, mode & exe_bits, "FFMPEG does not have the right executable bits")
-        self.assertEqual(read_bits, mode & read_bits, "FFMPEG does not have the right read bits")
+        self.assertEqual(
+            exe_bits, mode & exe_bits, "FFMPEG does not have the right executable bits"
+        )
+        self.assertEqual(
+            read_bits, mode & read_bits, "FFMPEG does not have the right read bits"
+        )
 
 
 if __name__ == "__main__":
     unittest.main()
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

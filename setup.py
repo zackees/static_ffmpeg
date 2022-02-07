@@ -7,13 +7,13 @@ from setuptools import find_packages, setup, Command
 # The directory containing this file
 HERE = os.path.dirname(__file__)
 
-NAME = 'static_ffmpeg'
-DESCRIPTION = 'Cross platform ffmpeg to work on various systems.'
-URL = 'https://github.com/zackees/static_ffmpeg'
-EMAIL = 'dont@email.me'
-AUTHOR = 'Zach Vorhies'
-REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '1.0.14'
+NAME = "static_ffmpeg"
+DESCRIPTION = "Cross platform ffmpeg to work on various systems."
+URL = "https://github.com/zackees/static_ffmpeg"
+EMAIL = "dont@email.me"
+AUTHOR = "Zach Vorhies"
+REQUIRES_PYTHON = ">=3.6.0"
+VERSION = "1.0.14"
 
 # The text of the README file
 with open(os.path.join(HERE, "README.md")) as fd:
@@ -23,7 +23,7 @@ with open(os.path.join(HERE, "README.md")) as fd:
 class UploadCommand(Command):
     """Support setup.py upload."""
 
-    description = 'Build and publish the package.'
+    description = "Build and publish the package."
     user_options = []
 
     @staticmethod
@@ -38,20 +38,20 @@ class UploadCommand(Command):
 
     def run(self):
         try:
-            self.status('Removing previous builds…')
-            rmtree(os.path.join(HERE, 'dist'))
+            self.status("Removing previous builds…")
+            rmtree(os.path.join(HERE, "dist"))
         except OSError:
             pass
 
-        self.status('Building Source and Wheel (universal) distribution…')
+        self.status("Building Source and Wheel (universal) distribution…")
         os.system('"{0}" setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
-        self.status('Uploading the package to PyPI via Twine…')
-        os.system('twine upload dist/*')
+        self.status("Uploading the package to PyPI via Twine…")
+        os.system("twine upload dist/*")
 
-        self.status('Pushing git tags…')
-        os.system('git tag v{0}'.format(VERSION))
-        os.system('git push --tags')
+        self.status("Pushing git tags…")
+        os.system("git tag v{0}".format(VERSION))
+        os.system("git push --tags")
 
         sys.exit()
 
@@ -76,16 +76,12 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Environment :: Console",
     ],
-
-    install_requires=[
-    ],
-
+    install_requires=[],
     entry_points={
-        'console_scripts': [
-            'static_ffmpeg = static_ffmpeg.run:main',
+        "console_scripts": [
+            "static_ffmpeg = static_ffmpeg.run:main",
         ],
     },
-
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     package_data={},
     include_package_data=True,
@@ -93,6 +89,6 @@ setup(
         "test": ["pytest", "black"],
     },
     cmdclass={
-        'upload': UploadCommand,
+        "upload": UploadCommand,
     },
 )

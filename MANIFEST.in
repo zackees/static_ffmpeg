@@ -1,3 +1,1 @@
-include static_ffmpeg/win32/ffmpeg.exe
-include static_ffmpeg/linux/ffmpeg
-include static_ffmpeg/macos_x64/ffmpeg
+include static_ffmpeg/archive.zip
