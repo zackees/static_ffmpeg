@@ -1,23 +1,3 @@
-import unittest
-import subprocess
-
-from static_ffmpeg import run
-
-
-class static_ffmpegTester(unittest.TestCase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.cleanup = []
-
-    def test_platform_executable(self) -> None:
-        run.get_platform_executable_or_raise()
-
-    def test_no_fix_permissions(self) -> None:
-        run.get_platform_executable_or_raise(False)
-
-    def test_run_static_ffmpeg(self) -> None:
-        subprocess.check_output(['static_ffmpeg', '-version'])
-
 import os
 import stat
 import subprocess
@@ -45,7 +25,7 @@ class static_ffmpegTester(unittest.TestCase):
         exe_bits = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
         read_bits = stat.S_IRUSR | stat.S_IRGRP | stat.S_IXGRP
         self.assertEqual(exe_bits, mode & exe_bits, "FFMPEG does not have the right executable bits")
-        self.assertEquals(read_bits, mode & read_bits, "FFMPEG does not have the right read bits")
+        self.assertEqual(read_bits, mode & read_bits, "FFMPEG does not have the right read bits")
 
 
 if __name__ == "__main__":
