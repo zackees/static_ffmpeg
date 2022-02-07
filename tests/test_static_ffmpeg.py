@@ -23,16 +23,17 @@ class static_ffmpegTester(unittest.TestCase):
 
     @unittest.skipIf(sys.platform == "win32", "Only valid for macos and linux")
     def test_permission_bits(self) -> None:
-        ffmpeg_exe = run.get_platform_executable_or_raise()
-        mode = os.stat(ffmpeg_exe).st_mode
-        exe_bits = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
-        read_bits = stat.S_IRUSR | stat.S_IRGRP | stat.S_IXGRP
-        self.assertEqual(
-            exe_bits, mode & exe_bits, "FFMPEG does not have the right executable bits"
-        )
-        self.assertEqual(
-            read_bits, mode & read_bits, "FFMPEG does not have the right read bits"
-        )
+        ffmpeg_exe, ffprobe_exe = run.get_platform_executables_or_raise()
+        for exe in [ffmpeg_exe, ffprobe_exe]:
+            mode = os.stat(exe).st_mode
+            exe_bits = stat.S_IXOTH | stat.S_IXUSR | stat.S_IXGRP
+            read_bits = stat.S_IRUSR | stat.S_IRGRP | stat.S_IXGRP
+            self.assertEqual(
+                exe_bits, mode & exe_bits, "FFMPEG does not have the right executable bits"
+            )
+            self.assertEqual(
+                read_bits, mode & read_bits, "FFMPEG does not have the right read bits"
+            )
 
 
 if __name__ == "__main__":
