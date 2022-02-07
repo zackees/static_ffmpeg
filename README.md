@@ -7,7 +7,8 @@
 
 
 ## Version
-FFMPEG Version: 4.4
+FFMPEG Version: 5.0
+
 
 ## About
 
@@ -44,13 +45,17 @@ the path via `run.get_platform_executable_or_raise()`
   * All three binaries for Win32/OSX/Linux ffmpeg are included. Though if you 
     need ffmpeg then you probably have a large disk anyway.
   * TODO: Include ffprobe
-  * TODO: Zip up file to reduce space
+
+
+## Updating binaries
+
+  * Zip up folders darwin/linux/win32 into archive.zip prior to release.
 
 ## Binary source
-  * MacOS (Intel): https://evermeet.cx/pub/ffmpeg/
-  * MacOS (Arm): TODO: https://osxexperts.net/
-  * Windows: (My computer download)
-  * Linux: https://johnvansickle.com/ffmpeg/
+
+  * MacOS (Intel): https://evermeet.cx/ffmpeg/ffmpeg-105504-g04cc7a5548.zip
+  * Windows: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
+  * Linux: https://ffmpeg.org/releases/ffmpeg-5.0.tar.xz
 
 ## Testing
 
