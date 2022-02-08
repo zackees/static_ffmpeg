@@ -45,26 +45,8 @@ the path via `run.get_platform_executables_or_raise()`
   * All three binaries for Win32/darwin/linux ffmpeg are included. Though if you 
     need ffmpeg then you probably have a large disk anyway.
 
-## Updating binaries
-
-  * Zip up folders darwin/linux/win32 into the darwin/linux/win32.zip archives
-  prior to release. They must be < 100MB or else PYIP won't accept it. So compression
-  matters.
-    * To make archive:
-      * (Win32) select darwin/linux/win32 and right click 7z -> "add to archive"
-        * Assumes you've installed 7z archiver for windows
-      * format: 7z
-      * Compression Level: Ultra
-      * Compression Method: LZMA2
-      * Dictionary Size: 1024
-      * Word Size 64
-      * Solid Block Size 512MB
-
 ## Binary source
-
-  * MacOS (Intel): https://evermeet.cx/ffmpeg/ffmpeg-105504-g04cc7a5548.zip
-  * Windows: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
-  * Linux: https://ffmpeg.org/releases/ffmpeg-5.0.tar.xz
+https://github.com/zackees/ffmpeg_bins
 
 ## Testing
 
