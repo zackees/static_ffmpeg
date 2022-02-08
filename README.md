@@ -23,6 +23,20 @@ to get the ffmpeg download. For example:
 If you want to be able to quitely (re)install a python package silently and
 automatically using ffmpeg, well you are out of luck... until now.
 
+## Api
+
+```
+import os
+from static_ffmpeg import run
+ffmpeg, ffprobe = run.get_or_fetch_platform_executables_else_raise()
+# ffmpeg, ffprobe will be paths to ffmpeg and ffprobe.
+os.system(f"{ffmpeg} -version")
+os.system(f"{ffprobe} -version")
+```
+
+Or, after installing static_ffmpeg in your current python environment,
+use `static_ffmpeg`, `static_ffprobe` from the command line.
+
 ## Pre-installation (optional)
 
 To easily setup a virtual environment, please see this installation script:
