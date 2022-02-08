@@ -76,7 +76,7 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Environment :: Console",
     ],
-    install_requires=['py7zr'],
+    install_requires=["requests"],
     entry_points={
         "console_scripts": [
             "static_ffmpeg = static_ffmpeg.run:main_static_ffmpeg",

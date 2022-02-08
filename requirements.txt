@@ -1,1 +1,1 @@
-py7zr
+requests
