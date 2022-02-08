@@ -86,6 +86,6 @@ the path via `run.get_platform_executables_or_raise()`
   * 2.0:
     * ffmpeg upgraded to 5.0
     * added ffprobe (static_ffprobe or get run.get_platform_executables_or_raise() to get the binary location)
-    * now uses compression to reduce install size
+    * Now downloads platform specific binary to reduce install size and memory footprint to 1/3
   * 1.0:
     * ffmpeg 4.4 released + tests
