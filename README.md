@@ -38,7 +38,7 @@ Once this package is installed, the `static_ffmpeg` and `static_ffprobe` command
 will be available. This command simply passes all arguments to
 a real ffmpeg/ffprobe. Call static_ffmpeg like you would call ffmpeg in your project
 and it should just work, or bypass the stub and use the ffmpeg/ffprobe directly by getting
-the path via `run.get_platform_executables_or_raise()`
+the path via `run.get_or_fetch_platform_executables_else_raise()`
 
 
 ## Binary source
