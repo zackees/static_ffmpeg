@@ -40,13 +40,9 @@ a real ffmpeg/ffprobe. Call static_ffmpeg like you would call ffmpeg in your pro
 and it should just work, or bypass the stub and use the ffmpeg/ffprobe directly by getting
 the path via `run.get_platform_executables_or_raise()`
 
-## Warning - Big
-
-  * All three binaries for Win32/darwin/linux ffmpeg are included. Though if you 
-    need ffmpeg then you probably have a large disk anyway.
 
 ## Binary source
-https://github.com/zackees/ffmpeg_bins
+  * https://github.com/zackees/ffmpeg_bins
 
 ## Testing
 
