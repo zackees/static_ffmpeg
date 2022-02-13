@@ -7,15 +7,17 @@ import os
 import stat
 import sys
 import zipfile
+from datetime import datetime
 
-import fasteners  # type: ignore
 import requests  # type: ignore
+from filelock import FileLock, Timeout
+
+TIMEOUT = 10 * 60  # Wait upto 10 minutes to validate install
+# otherwise break the lock and install anyway.
 
 SELF_DIR = os.path.abspath(os.path.dirname(__file__))
 LOCK_FILE = os.path.join(SELF_DIR, "lock.file")
-LOCK = fasteners.InterProcessReaderWriterLock(LOCK_FILE)
 
-TIMEOUT = 10 * 60
 
 PLATFORM_ZIP_FILES = {
     "win32": "https://github.com/zackees/ffmpeg_bins/raw/main/v5.0/win32.zip",
@@ -39,7 +41,7 @@ def get_platform_http_zip():
 def get_platform_dir():
     """Either get the executable or raise an error"""
     check_system()
-    return os.path.join(SELF_DIR, sys.platform)
+    return os.path.join(SELF_DIR, "bin", sys.platform)
 
 
 def download_file(url, local_path):
@@ -49,44 +51,55 @@ def download_file(url, local_path):
     with requests.get(url, stream=True) as req:
         req.raise_for_status()
         with open(local_path, "wb") as file_d:
-            for chunk in req.iter_content(chunk_size=8192):
+            for chunk in req.iter_content(chunk_size=8192 * 16):
                 # If you have chunk encoded response uncomment if
                 # and set chunk_size parameter to None.
                 # if chunk:
+                sys.stdout.write(".")
                 file_d.write(chunk)
+            sys.stdout.write(f"\nDownload of {url} -> {local_path} completed.\n")
     return local_path
 
 
 def get_or_fetch_platform_executables_else_raise(fix_permissions=True):
     """Either get the executable or raise an error"""
+    lock = FileLock(LOCK_FILE, timeout=TIMEOUT)  # pylint: disable=E0110
     try:
-        gotten = LOCK.acquire_write_lock(timeout=TIMEOUT)
+        with lock.acquire():
+            return _get_or_fetch_platform_executables_else_raise_no_lock(
+                fix_permissions=fix_permissions
+            )
+    except Timeout:
+        sys.stderr.write(
+            f"{__file__}: Warning, could not acquire lock at {LOCK_FILE}\n"
+        )
         return _get_or_fetch_platform_executables_else_raise_no_lock(
             fix_permissions=fix_permissions
         )
-    finally:
-        if gotten:
-            LOCK.release_write_lock()
-        else:
-            sys.stderr.write(
-                f"{__file__}: Warning, could not acquire lock at {LOCK_FILE}\n"
-            )
 
 
 def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True):
     """Either get the executable or raise an error, internal api"""
     exe_dir = get_platform_dir()
-    if not os.path.exists(exe_dir):
+    installed_crumb = os.path.join(exe_dir, "installed.crumb")
+    if not os.path.exists(installed_crumb):
+        # All zip files store their platform executables in a folder
+        # like "win32" or "darwin" or "linux" inside the executable. So root
+        # the install one level up from that same directory.
+        install_dir = os.path.dirname(exe_dir)
+        os.makedirs(exe_dir, exist_ok=True)
         url = get_platform_http_zip()
         local_zip = exe_dir + ".zip"
         download_file(url, local_zip)
-        print(f"Extracting {local_zip} -> {SELF_DIR}")
+        print(f"Extracting {local_zip} -> {install_dir}")
         with zipfile.ZipFile(local_zip, mode="r") as zipf:
-            zipf.extractall(SELF_DIR)
+            zipf.extractall(install_dir)
         try:
             os.remove(local_zip)
         except OSError as err:
             print(f"{__file__}: Error could not remove {local_zip} because of {err}")
+        with open(installed_crumb, "wt") as filed:  # pylint: disable=W1514
+            filed.write(f"installed from {url} on {datetime.now().__str__()}")
     ffmpeg_exe = os.path.join(exe_dir, "ffmpeg")
     ffprobe_exe = os.path.join(exe_dir, "ffprobe")
     if sys.platform == "win32":
