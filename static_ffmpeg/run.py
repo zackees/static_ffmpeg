@@ -7,10 +7,16 @@ import os
 import stat
 import sys
 import zipfile
+
+import fasteners  # type: ignore
 import requests  # type: ignore
 
-
 SELF_DIR = os.path.abspath(os.path.dirname(__file__))
+LOCK_FILE = os.path.join(SELF_DIR, "lock.file")
+LOCK = fasteners.InterProcessReaderWriterLock(LOCK_FILE)
+
+TIMEOUT = 10 * 60
+
 PLATFORM_ZIP_FILES = {
     "win32": "https://github.com/zackees/ffmpeg_bins/raw/main/v5.0/win32.zip",
     "darwin": "https://github.com/zackees/ffmpeg_bins/raw/main/v5.0/darwin.zip",
@@ -53,6 +59,22 @@ def download_file(url, local_path):
 
 def get_or_fetch_platform_executables_else_raise(fix_permissions=True):
     """Either get the executable or raise an error"""
+    try:
+        gotten = LOCK.acquire_write_lock(timeout=TIMEOUT)
+        return _get_or_fetch_platform_executables_else_raise_no_lock(
+            fix_permissions=fix_permissions
+        )
+    finally:
+        if gotten:
+            LOCK.release_write_lock()
+        else:
+            sys.stderr.write(
+                f"{__file__}: Warning, could not acquire lock at {LOCK_FILE}\n"
+            )
+
+
+def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True):
+    """Either get the executable or raise an error, internal api"""
     exe_dir = get_platform_dir()
     if not os.path.exists(exe_dir):
         url = get_platform_http_zip()
