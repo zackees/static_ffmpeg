@@ -19,6 +19,9 @@ VERSION = "2.0.7"
 with open(os.path.join(HERE, "README.md")) as fd:
     LONG_DESCRIPTION = fd.read()
 
+with open(os.path.join(HERE, "requirements.txt")) as fd:
+    REQUIREMENTS = [line.strip() for line in fd.readlines() if line.strip()]
+
 
 class UploadCommand(Command):
     """Support setup.py upload."""
@@ -76,7 +79,7 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Environment :: Console",
     ],
-    install_requires=["requests", "filelock"],
+    install_requires=REQUIREMENTS,
 
     entry_points={
         "console_scripts": [
