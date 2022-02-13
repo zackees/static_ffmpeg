@@ -1,8 +1,8 @@
-import sys
 import os
-
+import sys
 from shutil import rmtree
-from setuptools import find_packages, setup, Command
+
+from setuptools import Command, find_packages, setup
 
 # The directory containing this file
 HERE = os.path.dirname(__file__)
@@ -13,7 +13,7 @@ URL = "https://github.com/zackees/static_ffmpeg"
 EMAIL = "dont@email.me"
 AUTHOR = "Zach Vorhies"
 REQUIRES_PYTHON = ">=3.6.0"
-VERSION = "2.0.6"
+VERSION = "2.0.7"
 
 # The text of the README file
 with open(os.path.join(HERE, "README.md")) as fd:
@@ -76,7 +76,8 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Environment :: Console",
     ],
-    install_requires=["requests", "fasteners"],
+    install_requires=["requests", "filelock"],
+
     entry_points={
         "console_scripts": [
             "static_ffmpeg = static_ffmpeg.run:main_static_ffmpeg",
