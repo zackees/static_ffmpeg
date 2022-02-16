@@ -36,7 +36,7 @@ Or run it on the command line by the following:
 
 `static_ffmpeg` or `static_ffprobe`
 
-To get the binaries you can run:
+To get the binaries you can run `static_ffmpeg_paths` and get the paths to the actual binaries, like this:
 
 ```
 $ static_ffmpeg_paths
