@@ -85,6 +85,7 @@ setup(
         "console_scripts": [
             "static_ffmpeg = static_ffmpeg.run:main_static_ffmpeg",
             "static_ffprobe = static_ffmpeg.run:main_static_ffprobe",
+            "static_ffmpeg_paths = static_ffmpeg.run:main_print_paths",
         ],
     },
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
