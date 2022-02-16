@@ -137,6 +137,13 @@ def main_static_ffprobe():
     rtn = os.system(cmd)
     sys.exit(rtn)
 
+def main_print_paths():
+    """Entry point for printing ffmpeg paths"""
+    ffmpeg_exe, ffprobe_exe = get_or_fetch_platform_executables_else_raise()
+    print(f"FFMPEG={ffmpeg_exe}")
+    print(f"FFPROBE={ffprobe_exe}")
+    sys.exit(0)
+
 
 if __name__ == "__main__":
     get_or_fetch_platform_executables_else_raise()
