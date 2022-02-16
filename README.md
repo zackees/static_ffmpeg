@@ -36,6 +36,14 @@ Or run it on the command line by the following:
 
 `static_ffmpeg` or `static_ffprobe`
 
+To get the binaries you can run:
+
+```
+$ static_ffmpeg_paths
+FFMPEG=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffmpeg.exe
+FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
+```
+
 ## Virtual Environment (optional)
 
 To test it in a virtual environment, use this easy helper:
