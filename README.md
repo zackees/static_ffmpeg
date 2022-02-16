@@ -12,18 +12,16 @@ FFMPEG Version: 5.0
 
 ## About
 
-Problem: You develop on Windows/MacOS/Linux. You want an ffmpeg
-that works on all the platforms but now you have to go and special
-case your program installation to handle each platforms ability
-to get the ffmpeg download. For example:
-  * Win32: `choco install ffmpeg`
-  * MacOS: `brew install ffmpeg`
-  * Linux: `sudo apt-get install ffmpeg`
+Problem: You are making an ffmpeg tool on Windows/MacOS/Linux. You want to bind to a versioned ffmpeg
+binary and use it as an api. This tool installs a versioned ffmpeg without requiring elevated privledges.
 
-If you want to be able to quitely (re)install a python package silently and
-automatically using ffmpeg, well you are out of luck... until now.
+## Install
+
+`python -m pip install static-ffmpeg`
 
 ## Api
+
+In your code, get the binaries:
 
 ```
 import os
@@ -34,25 +32,16 @@ os.system(f"{ffmpeg} -version")
 os.system(f"{ffprobe} -version")
 ```
 
-Or, after installing static_ffmpeg in your current python environment,
-use `static_ffmpeg`, `static_ffprobe` from the command line.
+Or run it on the command line by the following:
 
-## Pre-installation (optional)
+`static_ffmpeg` or `static_ffprobe`
+
+## Virtual Environment (optional)
+
+To test it in a virtual environment, use this easy helper:
 
 To easily setup a virtual environment, please see this installation script:
 https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
-
-## Installation
-
-To use simply do `pip install static-ffmpeg` and then after this is done you
-can try running `static_ffmpeg -version` and/or `static_ffprobe -version` to test out
-that the version has been installed.
-
-Once this package is installed, the `static_ffmpeg` and `static_ffprobe` command
-will be available. This command simply passes all arguments to
-a real ffmpeg/ffprobe. Call static_ffmpeg like you would call ffmpeg in your project
-and it should just work, or bypass the stub and use the ffmpeg/ffprobe directly by getting
-the path via `run.get_or_fetch_platform_executables_else_raise()`
 
 
 ## Binary source
