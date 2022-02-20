@@ -45,7 +45,7 @@ os.system(f"{ffprobe} -version")
 
 ## Testing
 
-`tox`
+Just simply run `tox`
 
 ## Virtual Environment (optional)
 
@@ -54,6 +54,7 @@ To test it in a virtual environment, use this easy helper:
 To easily setup a virtual environment, please see this installation script:
 https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
 
+Then activate `. venv/bin/activate`
 
 ## Binary source
   * https://github.com/zackees/ffmpeg_bins
@@ -63,17 +64,7 @@ https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
 
   * Clone this project `git clone https://github.com/zackees/static_ffmpeg`
   * Then setup the virtual env using the script `python virtualenvsetup.py`
-  * Then activate `. venv/bin/activate`
   * Then run tox `tox`
-
-## Testing work arounds
-  * You may get an error like 'Interpretor not found'
-    * The solution it install the python interpretor of this type, like so
-      * https://www.python.org/downloads/release/python-3810/
-  * Ubuntu: `ModuleNotFoundError: No module named 'virtualenv.seed.via_app_data'
-    * Uninstall the pip on your system and reinstall:
-      * `pip3 uninstall virtualenv`
-      * `pip3 install virtualenv`
 
 ## Release History
   * 2.0:
