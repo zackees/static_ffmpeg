@@ -15,10 +15,17 @@ FFMPEG Version: 5.0
 
 ## About
 
-This tool installs binaries for ffmpeg and ffprobe binary into the system on the first usage of this library. This libary itself is very
-lightweight. Binaries will be installed for `win32` (Windows) / `darwin` (MacOS) / `ubuntu` (Linux)
+This tool installs binaries for ffmpeg and ffprobe binary (with all plugins and codecs) into the running platform. This is done without requiring elevated permissions. The platform binaries are installed on first run. This libary itself is very lightweight, about 12kB.
 
-There is both a python api and a command line api. After installing this package the command line aliases will be available:
+This library is designed to allow tools that rely on `ffmpeg` to have a fully featured `ffmpeg` available (renamed as `static_ffmpeg` to prevent collisions). Without this library, you may have to rely on the user to install `ffmpeg`, with the right build settings to ensure your tool functions correctly. This is a major pain for ffmpeg based tools and this library solves this problem.
+
+As of now, binaries are available for:
+  * `win32` (Windows)
+  * `darwin` (MacOS)
+  * `linux` (From Ubuntu 20LTS)
+  * Pull requests to support for other platforms are welcome! Too add support please see related git repo: [ffmpeg_bins](https://github.com/zackees/ffmpeg_bins).
+
+There is both an python api and a command line api. After installing this package the command line aliases will be available:
 
   * `static_ffmpeg` operates just like `ffmpeg`
   * `static_ffprobe` operates just like `ffprobe`.
@@ -35,13 +42,25 @@ FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
 Here's how to get the binaries and execute them.
 
 ```
+# Using the alias method
 import os
+# Platform binaries will be installed the first run.
+os.system("static_ffmpeg -version")
+os.system("static_ffprobe -version")
+```
+
+
+```
+# Using the program location method
+import subprocess
 from static_ffmpeg import run
+# Platform binaries are installed on the first run of below.
 ffmpeg, ffprobe = run.get_or_fetch_platform_executables_else_raise()
 # ffmpeg, ffprobe will be paths to ffmpeg and ffprobe.
-os.system(f"{ffmpeg} -version")
-os.system(f"{ffprobe} -version")
+subprocess.check_output([ffmpeg, "-version"])
+subprocess.check_output([ffprobe, "-version"])
 ```
+
 
 ## Testing
 
@@ -63,7 +82,7 @@ Then activate `. venv/bin/activate`
 ## Testing
 
   * Clone this project `git clone https://github.com/zackees/static_ffmpeg`
-  * Then setup the virtual env using the script `python virtualenvsetup.py`
+  * `cd static_ffmpeg`
   * Then run tox `tox`
 
 ## Release History
