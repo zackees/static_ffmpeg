@@ -20,6 +20,11 @@ class static_ffmpegTester(unittest.TestCase):
 
     def test_run_static_ffprobe(self) -> None:
         subprocess.check_output(["static_ffprobe", "-version"])
+    
+    def test_run_no_shell(self) -> None:
+        ffmpeg_exe, ffprobe_exe = run.get_or_fetch_platform_executables_else_raise()
+        subprocess.check_output([ffmpeg_exe, '-version'])
+        subprocess.check_output([ffprobe_exe, '-version'])
 
     @unittest.skipIf(sys.platform == "win32", "Only valid for macos and linux")
     def test_permission_bits(self) -> None:
