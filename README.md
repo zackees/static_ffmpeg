@@ -15,14 +15,14 @@ FFMPEG Version: 5.0
 
 ## About
 
-This tool installs an ffmpeg and ffprobe binary into the system, auto installing the platform dependent binaries
-on the first usage of this library.
+This tool installs binaries for ffmpeg and ffprobe binary into the system on the first usage of this library. This libary itself is very
+lightweight. Binaries will be installed for `win32` (Windows) / `darwin` (MacOS) / `ubuntu` (Linux)
 
 There is both a python api and a command line api. After installing this package the command line aliases will be available:
 
-`static_ffmpeg` operates just like `ffmpeg`
-`static_ffprobe` operates just like `ffprobe`.
-`static_ffmpeg_paths` prints out the paths of the ffmpeg binaries.
+  * `static_ffmpeg` operates just like `ffmpeg`
+  * `static_ffprobe` operates just like `ffprobe`.
+  * `static_ffmpeg_paths` prints out the paths of the ffmpeg binaries.
 
 ```
 > static_ffmpeg_paths
@@ -57,6 +57,7 @@ https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
 
 ## Binary source
   * https://github.com/zackees/ffmpeg_bins
+
 
 ## Testing
 
