@@ -67,7 +67,10 @@ subprocess.check_output([ffprobe, "-version"])
 
 ## Testing
 
-Just simply run `tox`
+  * Clone this project `git clone https://github.com/zackees/static_ffmpeg`
+  * `cd static_ffmpeg`
+  * Then run tox `tox`
+
 
 ## Virtual Environment (optional)
 
@@ -81,12 +84,6 @@ Then activate `. venv/bin/activate`
 ## Binary source
   * https://github.com/zackees/ffmpeg_bins
 
-
-## Testing
-
-  * Clone this project `git clone https://github.com/zackees/static_ffmpeg`
-  * `cd static_ffmpeg`
-  * Then run tox `tox`
 
 ## Release History
   * 2.0:
