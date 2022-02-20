@@ -9,19 +9,30 @@
 ## Version
 FFMPEG Version: 5.0
 
-
-## About
-
-Problem: You are making an ffmpeg tool on Windows/MacOS/Linux. You want to bind to a versioned ffmpeg
-binary and use it as an api. This tool installs a versioned ffmpeg without requiring elevated privledges.
-
 ## Install
 
 `python -m pip install static-ffmpeg`
 
+## About
+
+This tool installs an ffmpeg and ffprobe binary into the system, auto installing the platform dependent binaries
+on the first usage of this library.
+
+There is both a python api and a command line api. After installing this package the command line aliases will be available:
+
+`static_ffmpeg` operates just like `ffmpeg`
+`static_ffprobe` operates just like `ffprobe`.
+`static_ffmpeg_paths` prints out the paths of the ffmpeg binaries.
+
+```
+> static_ffmpeg_paths
+FFMPEG=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffmpeg.exe
+FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
+```
+
 ## Api
 
-In your code, get the binaries:
+Here's how to get the binaries and execute them.
 
 ```
 import os
@@ -32,17 +43,9 @@ os.system(f"{ffmpeg} -version")
 os.system(f"{ffprobe} -version")
 ```
 
-Or run it on the command line by the following:
+## Testing
 
-`static_ffmpeg` or `static_ffprobe`
-
-To get the binaries you can run `static_ffmpeg_paths` and get the paths to the actual binaries, like this:
-
-```
-$ static_ffmpeg_paths
-FFMPEG=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffmpeg.exe
-FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
-```
+`tox`
 
 ## Virtual Environment (optional)
 
