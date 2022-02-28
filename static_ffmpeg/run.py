@@ -124,7 +124,7 @@ def main_static_ffmpeg():
     """Entry point for running static_ffmpeg, which delegates to ffmpeg."""
     ffmpeg_exe, _ = get_or_fetch_platform_executables_else_raise()
     str_args = " ".join(sys.argv[1:])
-    cmd = f"{ffmpeg_exe} {str_args}"
+    cmd = f'"{ffmpeg_exe}" {str_args}'
     rtn = os.system(cmd)
     sys.exit(rtn)
 
@@ -133,7 +133,7 @@ def main_static_ffprobe():
     """Entry point for running static_ffmpeg, which delegates to ffmpeg."""
     _, ffprobe = get_or_fetch_platform_executables_else_raise()
     str_args = " ".join(sys.argv[1:])
-    cmd = f"{ffprobe} {str_args}"
+    cmd = f'"{ffprobe}" {str_args}'
     rtn = os.system(cmd)
     sys.exit(rtn)
 
