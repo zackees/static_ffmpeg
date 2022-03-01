@@ -86,7 +86,7 @@ Then activate `. venv/bin/activate`
 
 
 ## Release History
-  * 2.1: Addressed [bug 7](https://github.com/zackees/static_ffmpeg/issues/7) on Win32 for spaces in directories of site packages
+  * 2.1: Addressed [bug 7](https://github.com/zackees/static_ffmpeg/issues/7) on Win32 for not handling spaces in directory names in the site packages path.
   * 2.0:
     * ffmpeg upgraded to 5.0
     * added ffprobe (static_ffprobe or get run.get_platform_executables_or_raise() to get the binary location)
