@@ -2,7 +2,7 @@
     Entry point for running the ffmpeg executable.
 """
 
-
+import subprocess
 import os
 import stat
 import sys
@@ -123,18 +123,14 @@ def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True):
 def main_static_ffmpeg():
     """Entry point for running static_ffmpeg, which delegates to ffmpeg."""
     ffmpeg_exe, _ = get_or_fetch_platform_executables_else_raise()
-    str_args = " ".join(sys.argv[1:])
-    cmd = f'"{ffmpeg_exe}" {str_args}'
-    rtn = os.system(cmd)
+    rtn: int = subprocess.call([ffmpeg_exe] + sys.argv[1:])
     sys.exit(rtn)
 
 
 def main_static_ffprobe():
     """Entry point for running static_ffmpeg, which delegates to ffmpeg."""
     _, ffprobe = get_or_fetch_platform_executables_else_raise()
-    str_args = " ".join(sys.argv[1:])
-    cmd = f'"{ffprobe}" {str_args}'
-    rtn = os.system(cmd)
+    rtn: int = subprocess.call([ffprobe] + sys.argv[1:])
     sys.exit(rtn)
 
 
