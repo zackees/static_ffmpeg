@@ -44,7 +44,7 @@ There is both an python api and a command line api. After installing this packag
   * `static_ffprobe` operates just like `ffprobe`.
   * `static_ffmpeg_paths` prints out the paths of the ffmpeg binaries.
 
-```
+```bash
 > static_ffmpeg_paths
 FFMPEG=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffmpeg.exe
 FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
