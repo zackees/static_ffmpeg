@@ -27,7 +27,7 @@ os.system("ffmpeg -i myfile.mp4 ...")
 
 This tool installs binaries for ffmpeg and ffprobe binary (with all plugins and codecs) into the running platform. The platform binaries are installed on first use and is done without requiring elevated permissions.
 
-This library is designed to allow tools that rely on `ffmpeg` to have a fully featured `ffmpeg` available (renamed as `static_ffmpeg` to prevent collisions).
+This library is designed to allow tools that rely on `ffmpeg` to have a fully featured `ffmpeg` available (also named as `static_ffmpeg` to prevent collisions with a system installed ffmpeg).
 
 ### Without this library...
 
