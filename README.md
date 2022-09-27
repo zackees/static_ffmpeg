@@ -97,6 +97,7 @@ Then activate `. venv/bin/activate`
 
 
 ## Release History
+  * 2.3: Adds `static_ffmpeg.add_paths()`
   * 2.2: Addressed [bug 9](https://github.com/zackees/static_ffmpeg/issues/9) in some cases static_ffmpeg couldn't handle spaces in mp4 names.
   * 2.1: Addressed [bug 7](https://github.com/zackees/static_ffmpeg/issues/7) on Win32 for not handling spaces in directory names in the site packages path.
   * 2.0:
