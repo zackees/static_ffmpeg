@@ -56,7 +56,7 @@ FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
 
 Here's how to get the binaries and execute them.
 
-```
+```py
 # Using the alias method
 import os
 # Platform binaries will be installed the first run.
@@ -65,7 +65,7 @@ os.system("static_ffprobe -version")
 ```
 
 
-```
+```py
 # Using the program location method
 import subprocess
 from static_ffmpeg import run
