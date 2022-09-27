@@ -5,18 +5,24 @@
 
 # static-ffmpeg
 
-
 ## Version
 FFMPEG Version: 5.0
 
-## Install and check version
+
+## Install
 
 ```
 > python -m pip install static-ffmpeg
-> static_ffmpeg -version
 ```
 
 ## About
+
+```py
+# Instead of using 
+os.system("ffmpeg -i ...")
+# You use
+os.system("static_ffmpeg -i ...")
+```
 
 This tool installs binaries for ffmpeg and ffprobe binary (with all plugins and codecs) into the running platform. The platform binaries are installed on first use and is done without requiring elevated permissions.
 
@@ -43,6 +49,8 @@ There is both an python api and a command line api. After installing this packag
 FFMPEG=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffmpeg.exe
 FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
 ```
+
+
 
 ## Api
 
