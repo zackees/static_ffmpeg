@@ -19,6 +19,7 @@ FFMPEG Version: 5.0
 
 ```py
 import static_ffmpeg
+# ffmpeg installed on first call to add_paths(), threadsafe.
 static_ffmpeg.add_paths()
 # Now ffmpeg and ffprobe will use static_ffmpeg versions.
 os.system("ffmpeg -i myfile.mp4 ...")
