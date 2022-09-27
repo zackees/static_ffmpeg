@@ -4,7 +4,7 @@ import subprocess
 import sys
 import unittest
 
-from static_ffmpeg import run
+from static_ffmpeg import run, add_paths
 
 
 class static_ffmpegTester(unittest.TestCase):
@@ -25,6 +25,11 @@ class static_ffmpegTester(unittest.TestCase):
         ffmpeg_exe, ffprobe_exe = run.get_or_fetch_platform_executables_else_raise()
         subprocess.check_output([ffmpeg_exe, '-version'])
         subprocess.check_output([ffprobe_exe, '-version'])
+
+    def test_add_paths(self) -> None:
+        add_paths()
+        subprocess.check_output(["ffmpeg", "-version"])
+        subprocess.check_output(["ffprobe", "-version"])
 
     @unittest.skipIf(sys.platform == "win32", "Only valid for macos and linux")
     def test_permission_bits(self) -> None:

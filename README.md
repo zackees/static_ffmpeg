@@ -18,10 +18,8 @@ FFMPEG Version: 5.0
 ## About
 
 ```py
-# Instead of using 
-os.system("ffmpeg -i ...")
-# You use
-os.system("static_ffmpeg -i ...")
+import static_ffmpeg
+static_ffmpeg.add_paths()  # Now ffmpeg and ffprobe will use static_ffmpeg versions.
 ```
 
 This tool installs binaries for ffmpeg and ffprobe binary (with all plugins and codecs) into the running platform. The platform binaries are installed on first use and is done without requiring elevated permissions.
