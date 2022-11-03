@@ -98,10 +98,12 @@ subprocess.check_output([ffprobe, "-version"])
 
 To test it in a virtual environment, use this easy helper:
 
-To easily setup a virtual environment, please see this installation script:
-https://raw.githubusercontent.com/zackees/static_ffmpeg/main/setupvirtualenv.py
+To easily setup a virtual environment, please run
+```bash
+python setupvirtualenv.py
+```
 
-Then activate `. venv/bin/activate`
+Then run `./activate.sh` to activate the shell.
 
 ## Binary source
   * https://github.com/zackees/ffmpeg_bins
