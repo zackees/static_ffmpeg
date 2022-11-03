@@ -11,7 +11,7 @@ FFMPEG Version: 5.0
 
 ## Install
 
-```
+```bash
 > python -m pip install static-ffmpeg
 ```
 
