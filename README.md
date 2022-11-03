@@ -5,10 +5,6 @@
 
 # static-ffmpeg
 
-## Version
-FFMPEG Version: 5.0
-
-
 ## Install
 
 ```bash
@@ -69,7 +65,6 @@ FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
 ```
 
 
-
 ## Api
 
 Here's how to get the binaries and execute them.
@@ -116,6 +111,9 @@ Then run `./activate.sh` to activate the shell.
 ## Binary source
   * https://github.com/zackees/ffmpeg_bins
 
+## Version
+
+ffmpeg and ffprobe are both version: 5.0
 
 ## Release History
   * 2.3: Adds `static_ffmpeg.add_paths()`
