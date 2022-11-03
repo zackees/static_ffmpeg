@@ -15,7 +15,7 @@ FFMPEG Version: 5.0
 > python -m pip install static-ffmpeg
 ```
 
-## About
+## Usage
 
 ```py
 import static_ffmpeg
@@ -33,6 +33,14 @@ import static_ffmpeg
 # ffmpeg installed on first call, threadsafe.
 os.system("static_ffmpeg -i myfile.mp4 ...")
 ```
+
+You can also use it on the command line
+```bash
+> static_ffmpeg -i file.mp4 ...
+> static_ffprobe ...
+```
+
+## About
 
 This tool installs binaries for ffmpeg and ffprobe binary (with all plugins and codecs) into the running platform. The platform binaries are installed on first use and is done without requiring elevated permissions.
 
