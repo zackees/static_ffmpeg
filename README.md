@@ -16,12 +16,12 @@
 ```py
 import static_ffmpeg
 # ffmpeg installed on first call to add_paths(), threadsafe.
-static_ffmpeg.add_paths()
+static_ffmpeg.add_paths()  # blocks until files are downloaded
 # Now ffmpeg and ffprobe will use static_ffmpeg versions.
 os.system("ffmpeg -i myfile.mp4 ...")
 ```
 
-Or if you don't want to modify system paths, use `static_ffmpeg`
+Or if you want more lazy behavior to install on first use, or you don't want to modify system paths, use `static_ffmpeg`
 
 
 ```py
