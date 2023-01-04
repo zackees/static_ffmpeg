@@ -38,6 +38,9 @@ You can also use it on the command line
 > pip install static-ffmpeg
 > static_ffmpeg -i file.mp4 ...
 > static_ffprobe ...
+> static_ffmpeg_paths
+FFMPEG=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffmpeg.exe
+FFPROBE=c:\users\niteris\dev\static_ffmpeg\static_ffmpeg\bin\win32\ffprobe.exe
 ```
 
 ## About
