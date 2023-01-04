@@ -31,7 +31,9 @@ os.system("static_ffmpeg -i myfile.mp4 ...")
 ```
 
 You can also use it on the command line
+
 ```bash
+> pip install static-ffmpeg
 > static_ffmpeg -i file.mp4 ...
 > static_ffprobe ...
 ```
