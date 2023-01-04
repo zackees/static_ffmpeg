@@ -8,7 +8,7 @@
 ## Install
 
 ```bash
-> python -m pip install static-ffmpeg
+> pip install static-ffmpeg
 ```
 
 ## Usage
