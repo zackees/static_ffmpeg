@@ -5,6 +5,8 @@
 
 # static-ffmpeg
 
+The easiest way to get ffmpeg installed through python.
+
 ## Install
 
 ```bash
