@@ -2,9 +2,9 @@
     Entry point for running the ffmpeg executable.
 """
 
-import subprocess
 import os
 import stat
+import subprocess
 import sys
 import zipfile
 from datetime import datetime
@@ -62,7 +62,9 @@ def download_file(url, local_path):
     return local_path
 
 
-def get_or_fetch_platform_executables_else_raise(fix_permissions=True) -> Tuple[str, str]:
+def get_or_fetch_platform_executables_else_raise(
+    fix_permissions=True,
+) -> Tuple[str, str]:
     """Either get the executable or raise an error"""
     lock = FileLock(LOCK_FILE, timeout=TIMEOUT)  # pylint: disable=E0110
     try:
@@ -79,7 +81,9 @@ def get_or_fetch_platform_executables_else_raise(fix_permissions=True) -> Tuple[
         )
 
 
-def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True) -> Tuple[str, str]:
+def _get_or_fetch_platform_executables_else_raise_no_lock(
+    fix_permissions=True,
+) -> Tuple[str, str]:
     """Either get the executable or raise an error, internal api"""
     exe_dir = get_platform_dir()
     installed_crumb = os.path.join(exe_dir, "installed.crumb")

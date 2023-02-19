@@ -47,6 +47,11 @@ class static_ffmpegTester(unittest.TestCase):
                 read_bits, mode & read_bits, "FFMPEG does not have the right read bits"
             )
 
+    def test_add_paths_weak(self) -> None:
+        add_paths(weak=True)
+        subprocess.check_output(["ffmpeg", "-version"])
+        subprocess.check_output(["ffprobe", "-version"])
+
 
 if __name__ == "__main__":
     unittest.main()
