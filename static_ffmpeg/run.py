@@ -8,6 +8,7 @@ import stat
 import sys
 import zipfile
 from datetime import datetime
+from typing import Tuple
 
 import requests  # type: ignore
 from filelock import FileLock, Timeout
@@ -48,7 +49,7 @@ def download_file(url, local_path):
     """Downloads a file to the give path."""
     # NOTE the stream=True parameter below
     print(f"Downloading {url} -> {local_path}")
-    with requests.get(url, stream=True) as req:
+    with requests.get(url, stream=True, timeout=60) as req:
         req.raise_for_status()
         with open(local_path, "wb") as file_d:
             for chunk in req.iter_content(chunk_size=8192 * 16):
@@ -61,7 +62,7 @@ def download_file(url, local_path):
     return local_path
 
 
-def get_or_fetch_platform_executables_else_raise(fix_permissions=True):
+def get_or_fetch_platform_executables_else_raise(fix_permissions=True) -> Tuple[str, str]:
     """Either get the executable or raise an error"""
     lock = FileLock(LOCK_FILE, timeout=TIMEOUT)  # pylint: disable=E0110
     try:
@@ -78,7 +79,7 @@ def get_or_fetch_platform_executables_else_raise(fix_permissions=True):
         )
 
 
-def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True):
+def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True) -> Tuple[str, str]:
     """Either get the executable or raise an error, internal api"""
     exe_dir = get_platform_dir()
     installed_crumb = os.path.join(exe_dir, "installed.crumb")
@@ -99,7 +100,7 @@ def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True):
         except OSError as err:
             print(f"{__file__}: Error could not remove {local_zip} because of {err}")
         with open(installed_crumb, "wt") as filed:  # pylint: disable=W1514
-            filed.write(f"installed from {url} on {datetime.now().__str__()}")
+            filed.write(f"installed from {url} on {str(datetime.now())}")
     ffmpeg_exe = os.path.join(exe_dir, "ffmpeg")
     ffprobe_exe = os.path.join(exe_dir, "ffprobe")
     if sys.platform == "win32":
@@ -120,21 +121,21 @@ def _get_or_fetch_platform_executables_else_raise_no_lock(fix_permissions=True):
     return ffmpeg_exe, ffprobe_exe
 
 
-def main_static_ffmpeg():
+def main_static_ffmpeg() -> None:
     """Entry point for running static_ffmpeg, which delegates to ffmpeg."""
     ffmpeg_exe, _ = get_or_fetch_platform_executables_else_raise()
     rtn: int = subprocess.call([ffmpeg_exe] + sys.argv[1:])
     sys.exit(rtn)
 
 
-def main_static_ffprobe():
+def main_static_ffprobe() -> None:
     """Entry point for running static_ffmpeg, which delegates to ffmpeg."""
     _, ffprobe = get_or_fetch_platform_executables_else_raise()
     rtn: int = subprocess.call([ffprobe] + sys.argv[1:])
     sys.exit(rtn)
 
 
-def main_print_paths():
+def main_print_paths() -> None:
     """Entry point for printing ffmpeg paths"""
     ffmpeg_exe, ffprobe_exe = get_or_fetch_platform_executables_else_raise()
     print(f"FFMPEG={ffmpeg_exe}")
