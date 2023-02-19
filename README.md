@@ -19,6 +19,7 @@ The easiest way to get ffmpeg installed through python.
 import static_ffmpeg
 # ffmpeg installed on first call to add_paths(), threadsafe.
 static_ffmpeg.add_paths()  # blocks until files are downloaded
+# or static_ffmpeg.add_paths(weak=True) to only add if ffmpeg/ffprobe not already on path
 # Now ffmpeg and ffprobe will use static_ffmpeg versions.
 os.system("ffmpeg -i myfile.mp4 ...")
 ```
