@@ -5,7 +5,7 @@
 
 # static-ffmpeg
 
-The easiest way to get ffmpeg installed through python.
+The easiest way to get ffmpeg v5 installed through python.
 
 ## Install
 
