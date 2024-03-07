@@ -21,5 +21,7 @@ def add_paths(weak=False) -> bool:
         if has_ffmpeg and has_ffprobe:
             return False
     ffmpeg, _ = get_or_fetch_platform_executables_else_raise()
-    os.environ["PATH"] = os.pathsep.join([os.path.dirname(ffmpeg), os.environ["PATH"]])
+    ffmpeg_path = os.path.dirname(ffmpeg)
+    if ffmpeg_path not in os.environ["PATH"]:
+        os.environ["PATH"] = os.pathsep.join([ffmpeg_path, os.environ["PATH"]])
     return True

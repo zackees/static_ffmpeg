@@ -125,6 +125,7 @@ Then run `./activate.sh` to activate the shell.
 ffmpeg and ffprobe are both version: 5.0
 
 ## Release History
+  * 2.6: Bugfix, `add_paths(...)` can now be called multiple times without polluting the os env path.
   * 2.5: `add_paths()` now has optional `weak` parameter (default False). If True then `ffmpeg/ffprobe` binaries are only only if either `ffmpeg` OR `ffprobe` doesn't already exist on path
   * 2.3: Adds `static_ffmpeg.add_paths()`
   * 2.2: Addressed [bug 9](https://github.com/zackees/static_ffmpeg/issues/9) in some cases static_ffmpeg couldn't handle spaces in mp4 names.
