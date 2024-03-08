@@ -16,8 +16,8 @@ def _has(name: str) -> bool:
 def add_paths(weak=False) -> bool:
     """Add the ffmpeg executable to the path"""
     if weak:
-        has_ffmpeg = _has("ffmpeg") is not None
-        has_ffprobe = _has("ffprobe") is not None
+        has_ffmpeg = _has("ffmpeg")
+        has_ffprobe = _has("ffprobe")
         if has_ffmpeg and has_ffprobe:
             return False
     ffmpeg, _ = get_or_fetch_platform_executables_else_raise()
