@@ -71,7 +71,8 @@ def get_or_fetch_platform_executables_else_raise(
     try:
         with lock.acquire():
             return _get_or_fetch_platform_executables_else_raise_no_lock(
-                fix_permissions=fix_permissions
+                fix_permissions=fix_permissions,
+                download_dir=download_dir
             )
     except Timeout:
         sys.stderr.write(
