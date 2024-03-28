@@ -78,7 +78,7 @@ def get_or_fetch_platform_executables_else_raise(
             f"{__file__}: Warning, could not acquire lock at {LOCK_FILE}\n"
         )
         return _get_or_fetch_platform_executables_else_raise_no_lock(
-            fix_permissions=fix_permissions
+            fix_permissions=fix_permissions,
             download_dir=download_dir
         )
 
