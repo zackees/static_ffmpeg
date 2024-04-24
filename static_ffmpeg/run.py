@@ -49,7 +49,7 @@ def download_file(url, local_path):
     """Downloads a file to the give path."""
     # NOTE the stream=True parameter below
     print(f"Downloading {url} -> {local_path}")
-    with requests.get(url, stream=True, timeout=60) as req:
+    with requests.get(url, stream=True, timeout=TIMEOUT) as req:
         req.raise_for_status()
         with open(local_path, "wb") as file_d:
             for chunk in req.iter_content(chunk_size=8192 * 16):

@@ -125,6 +125,7 @@ Then run `./activate.sh` to activate the shell.
 ffmpeg and ffprobe are both version: 5.0
 
 ## Release History
+  * 2.7: Bugfix, increase the timeout to download for slow connections to 10 minutes.
   * 2.6: Bugfix, `add_paths(...)` can now be called multiple times without polluting the os env path.
   * 2.5: `add_paths()` now has optional `weak` parameter (default False). If True then `ffmpeg/ffprobe` binaries are only only if either `ffmpeg` OR `ffprobe` doesn't already exist on path
   * 2.3: Adds `static_ffmpeg.add_paths()`
