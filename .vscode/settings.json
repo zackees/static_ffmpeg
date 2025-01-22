@@ -1,31 +1,28 @@
 {
-  "python.autoComplete.extraPaths": [
-      "."
-  ],
-  "python.analysis.extraPaths": [
-      "."
-  ],
-  "python.pythonPath": "venv/bin/python",
-  "python.defaultInterpreterPath": "venv/bin/python",
-  "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
-  "python.linting.pylintEnabled": true,
-  "files.eol": "\n", // Unix
-  "editor.tabSize": 4,
-  "editor.insertSpaces": true,
-  "editor.detectIndentation": false,
-  "editor.formatOnSave": true,
-  "python.formatting.provider": "black",
-  "python.formatting.blackArgs": [
-      "--line-length=100"
-  ],
-  "python.sortImports.args": [
-      "--profile",
-      "black"
-  ],
-  "[python]": {
-      "editor.codeActionsOnSave": {
-          //"source.fixAll": true,
-          //"source.organizeImports": true
-      }
-  },
+    "python.autoComplete.extraPaths": [
+        "."
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.profiles.windows": {
+        "Git Bash": {
+            "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "args": ["--cd=."]
+        }
+    },
+    "terminal.integrated.env.windows": {
+        "VIRTUAL_ENV": "${workspaceFolder}/.venv"
+    },
+    "files.eol": "\n", // Unix
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.formatOnSave": false,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+    ],
+    "python.analysis.extraPaths": [
+        "."
+    ]
 }
