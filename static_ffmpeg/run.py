@@ -12,6 +12,7 @@ from typing import Tuple
 
 import requests  # type: ignore
 from filelock import FileLock, Timeout
+from progress.spinner import Spinner  # type: ignore
 
 TIMEOUT = 10 * 60  # Wait upto 10 minutes to validate install
 # otherwise break the lock and install anyway.
@@ -52,12 +53,14 @@ def download_file(url, local_path):
     with requests.get(url, stream=True, timeout=TIMEOUT) as req:
         req.raise_for_status()
         with open(local_path, "wb") as file_d:
-            for chunk in req.iter_content(chunk_size=8192 * 16):
-                # If you have chunk encoded response uncomment if
-                # and set chunk_size parameter to None.
-                # if chunk:
-                sys.stdout.write(".")
-                file_d.write(chunk)
+            with Spinner() as spinner:
+                for chunk in req.iter_content(chunk_size=8192 * 16):
+                    # If you have chunk encoded response uncomment if
+                    # and set chunk_size parameter to None.
+                    # if chunk:
+                    sys.stdout.write(".")
+                    file_d.write(chunk)
+                    spinner.next()
             sys.stdout.write(f"\nDownload of {url} -> {local_path} completed.\n")
     return local_path
 

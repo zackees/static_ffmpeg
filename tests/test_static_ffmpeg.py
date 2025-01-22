@@ -4,7 +4,7 @@ import subprocess
 import sys
 import unittest
 
-from static_ffmpeg import run, add_paths
+from static_ffmpeg import add_paths, run
 
 
 class static_ffmpegTester(unittest.TestCase):
@@ -20,11 +20,11 @@ class static_ffmpegTester(unittest.TestCase):
 
     def test_run_static_ffprobe(self) -> None:
         subprocess.check_output(["static_ffprobe", "-version"])
-    
+
     def test_run_no_shell(self) -> None:
         ffmpeg_exe, ffprobe_exe = run.get_or_fetch_platform_executables_else_raise()
-        subprocess.check_output([ffmpeg_exe, '-version'])
-        subprocess.check_output([ffprobe_exe, '-version'])
+        subprocess.check_output([ffmpeg_exe, "-version"])
+        subprocess.check_output([ffprobe_exe, "-version"])
 
     def test_add_paths(self) -> None:
         add_paths()

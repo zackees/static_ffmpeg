@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+echo Running ruff static_ffmpeg
+uv run ruff check --fix static_ffmpeg
+echo Running ruff tests
+uv run ruff check --fix tests
+echo Running black static_ffmpeg tests
+uv run black static_ffmpeg tests
+echo Running isort static_ffmpeg tests
+uv run isort --profile black static_ffmpeg tests
+echo Running flake8 static_ffmpeg tests
+uv run flake8 static_ffmpeg tests
+echo Running mypy static_ffmpeg
+uv run mypy static_ffmpeg tests
+echo Linting complete!
+exit 0
