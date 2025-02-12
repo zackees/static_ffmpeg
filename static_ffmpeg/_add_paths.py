@@ -13,14 +13,14 @@ def _has(name: str) -> bool:
     return shutil.which(name) is not None
 
 
-def add_paths(weak=False) -> bool:
+def add_paths(weak=False, download_dir=None) -> bool:
     """Add the ffmpeg executable to the path"""
     if weak:
         has_ffmpeg = _has("ffmpeg") is not None
         has_ffprobe = _has("ffprobe") is not None
         if has_ffmpeg and has_ffprobe:
             return False
-    ffmpeg, _ = get_or_fetch_platform_executables_else_raise()
+    ffmpeg, _ = get_or_fetch_platform_executables_else_raise(download_dir=download_dir)
     ffmpeg_path = os.path.dirname(ffmpeg)
     if ffmpeg_path not in os.environ["PATH"]:
         os.environ["PATH"] = os.pathsep.join([ffmpeg_path, os.environ["PATH"]])
