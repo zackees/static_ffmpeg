@@ -1,5 +1,5 @@
 """
-    Entry point for running the ffmpeg executable.
+Entry point for running the ffmpeg executable.
 """
 
 import os
@@ -12,6 +12,7 @@ from typing import Tuple
 
 import requests  # type: ignore
 from filelock import FileLock, Timeout
+from progress.bar import Bar  # type: ignore
 from progress.spinner import Spinner  # type: ignore
 
 TIMEOUT = 10 * 60  # Wait upto 10 minutes to validate install
@@ -50,17 +51,21 @@ def download_file(url, local_path):
     """Downloads a file to the give path."""
     # NOTE the stream=True parameter below
     print(f"Downloading {url} -> {local_path}")
+    chunk_size = (1024 * 1024) // 4
     with requests.get(url, stream=True, timeout=TIMEOUT) as req:
         req.raise_for_status()
+        spinner: Spinner | Bar = Spinner("ffmpeg: ")
+        size = -1
+        try:
+            size = int(req.headers.get("content-length", 0))
+            spinner = Bar("ffmpeg: ", max=size, suffix="%(percent).1f%% - %(eta)ds")
+        except ValueError:
+            pass
         with open(local_path, "wb") as file_d:
-            with Spinner() as spinner:
-                for chunk in req.iter_content(chunk_size=8192 * 16):
-                    # If you have chunk encoded response uncomment if
-                    # and set chunk_size parameter to None.
-                    # if chunk:
-                    sys.stdout.write(".")
+            with spinner as spinner:
+                for chunk in req.iter_content(chunk_size):
                     file_d.write(chunk)
-                    spinner.next()
+                    spinner.next(len(chunk))
             sys.stdout.write(f"\nDownload of {url} -> {local_path} completed.\n")
     return local_path
 

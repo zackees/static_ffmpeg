@@ -1,5 +1,5 @@
 """
-    Tests that https://github.com/zackees/static_ffmpeg/issues/9 is resolved. This bug did not allow spaces in the names.
+Tests that https://github.com/zackees/static_ffmpeg/issues/9 is resolved. This bug did not allow spaces in the names.
 """
 
 import os

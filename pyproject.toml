@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "static_ffmpeg"
+version = "2.9"
+description = "Cross platform ffmpeg to work on various systems."
+readme = "README.md"
+authors = [
+    {name = "Zach Vorhies", email = "dont@email.me"}
+]
+license = {text = "MIT"}
+requires-python = ">=3.6.0"
+dependencies = [
+    "requests",
+    "filelock",
+    "progress",
+    "twine>=3.8.0",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.9",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS :: MacOS X",
+    "Environment :: Console",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+static_ffmpeg = "static_ffmpeg.run:main_static_ffmpeg"
+static_ffprobe = "static_ffmpeg.run:main_static_ffprobe"
+static_ffmpeg_paths = "static_ffmpeg.run:main_print_paths"
+
+[tool.setuptools]
+packages = ["static_ffmpeg"]
