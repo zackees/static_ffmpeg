@@ -72,28 +72,32 @@ def download_file(url, local_path):
 
 def get_or_fetch_platform_executables_else_raise(
     fix_permissions=True,
+    download_dir=None
 ) -> Tuple[str, str]:
     """Either get the executable or raise an error"""
     lock = FileLock(LOCK_FILE, timeout=TIMEOUT)  # pylint: disable=E0110
     try:
         with lock.acquire():
             return _get_or_fetch_platform_executables_else_raise_no_lock(
-                fix_permissions=fix_permissions
+                fix_permissions=fix_permissions,
+                download_dir=download_dir
             )
     except Timeout:
         sys.stderr.write(
             f"{__file__}: Warning, could not acquire lock at {LOCK_FILE}\n"
         )
         return _get_or_fetch_platform_executables_else_raise_no_lock(
-            fix_permissions=fix_permissions
+            fix_permissions=fix_permissions,
+            download_dir=download_dir
         )
 
 
 def _get_or_fetch_platform_executables_else_raise_no_lock(
     fix_permissions=True,
+    download_dir=None
 ) -> Tuple[str, str]:
     """Either get the executable or raise an error, internal api"""
-    exe_dir = get_platform_dir()
+    exe_dir = download_dir if download_dir else get_platform_dir()
     installed_crumb = os.path.join(exe_dir, "installed.crumb")
     if not os.path.exists(installed_crumb):
         # All zip files store their platform executables in a folder
