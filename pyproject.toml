@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "static_ffmpeg"
-version = "2.9"
+version = "2.10"
 description = "Cross platform ffmpeg to work on various systems."
 readme = "README.md"
 authors = [
