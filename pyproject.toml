@@ -17,6 +17,7 @@ dependencies = [
     "filelock",
     "progress",
     "twine>=3.8.0",
+    "httpx"
 ]
 classifiers = [
     "License :: OSI Approved :: MIT License",

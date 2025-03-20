@@ -10,7 +10,7 @@ import zipfile
 from datetime import datetime
 from typing import Tuple
 
-import requests  # type: ignore
+import httpx  # type: ignore
 from filelock import FileLock, Timeout
 from progress.bar import Bar  # type: ignore
 from progress.spinner import Spinner  # type: ignore
@@ -52,7 +52,7 @@ def download_file(url, local_path):
     # NOTE the stream=True parameter below
     print(f"Downloading {url} -> {local_path}")
     chunk_size = (1024 * 1024) // 4
-    with requests.get(url, stream=True, timeout=TIMEOUT) as req:
+    with httpx.get(url, stream=True, timeout=TIMEOUT) as req:
         req.raise_for_status()
         spinner: Spinner | Bar = Spinner("ffmpeg: ")
         size = -1
