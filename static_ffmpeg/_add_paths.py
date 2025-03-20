@@ -4,6 +4,7 @@ add_paths() Adds ffmpeg and ffprobe to the path, overriding any system ffmpeg/ff
 
 import os
 import shutil
+import sys
 
 from .run import get_or_fetch_platform_executables_else_raise
 
@@ -15,6 +16,8 @@ def _has(name: str) -> bool:
 
 def add_paths(weak=False, download_dir=None) -> bool:
     """Add the ffmpeg executable to the path"""
+    if getattr(sys, "frozen", False):
+        sys.stdout = sys.stderr  # https://github.com/zackees/static_ffmpeg/issues/14
     if weak:
         has_ffmpeg = _has("ffmpeg")
         has_ffprobe = _has("ffprobe")
