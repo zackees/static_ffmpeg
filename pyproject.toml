@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "static_ffmpeg"
-version = "2.11"
 description = "Cross platform ffmpeg to work on various systems."
 readme = "README.md"
 authors = [
@@ -18,6 +17,9 @@ dependencies = [
     "progress",
     "twine>=3.8.0",
 ]
+
+version = "2.12"
+
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.6",

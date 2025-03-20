@@ -29,25 +29,25 @@ PLATFORM_ZIP_FILES = {
 }
 
 
-def check_system():
+def check_system() -> None:
     """Friendly error if there's a problem with the system configuration."""
     if sys.platform not in PLATFORM_ZIP_FILES:
         raise OSError(f"Please implement static_ffmpeg for {sys.platform}")
 
 
-def get_platform_http_zip():
+def get_platform_http_zip() -> str:
     """Return the download link for the current platform"""
     check_system()
     return PLATFORM_ZIP_FILES[sys.platform]
 
 
-def get_platform_dir():
+def get_platform_dir() -> str:
     """Either get the executable or raise an error"""
     check_system()
     return os.path.join(SELF_DIR, "bin", sys.platform)
 
 
-def download_file(url, local_path):
+def download_file(url: str, local_path: str) -> str:
     """Downloads a file to the give path."""
     # NOTE the stream=True parameter below
     print(f"Downloading {url} -> {local_path}")
