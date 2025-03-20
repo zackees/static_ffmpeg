@@ -1407,7 +1407,7 @@ wheels = [
 
 [[package]]
 name = "static-ffmpeg"
-version = "2.10"
+version = "2.11"
 source = { editable = "." }
 dependencies = [
     { name = "filelock", version = "3.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.7'" },
