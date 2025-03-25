@@ -1,5 +1,6 @@
 """
 add_paths() Adds ffmpeg and ffprobe to the path, overriding any system ffmpeg/ffprobe.
+remove_paths() Removes ffmpeg and ffprobe from the path.
 """
 
 import os
@@ -28,3 +29,12 @@ def add_paths(weak=False, download_dir=None) -> bool:
     if ffmpeg_path not in os.environ["PATH"]:
         os.environ["PATH"] = os.pathsep.join([ffmpeg_path, os.environ["PATH"]])
     return True
+
+
+def remove_paths() -> None:
+    """Remove the ffmpeg executable from the path"""
+    ffmpeg, _ = get_or_fetch_platform_executables_else_raise()
+    ffmpeg_path = os.path.dirname(ffmpeg)
+    os.environ["PATH"] = os.pathsep.join(
+        [path for path in os.environ["PATH"].split(os.pathsep) if path != ffmpeg_path]
+    )
