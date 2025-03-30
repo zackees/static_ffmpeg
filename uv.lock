@@ -1407,7 +1407,7 @@ wheels = [
 
 [[package]]
 name = "static-ffmpeg"
-version = "2.12"
+version = "2.13"
 source = { editable = "." }
 dependencies = [
     { name = "filelock", version = "3.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.7'" },
@@ -1512,7 +1512,7 @@ name = "tqdm"
 version = "4.64.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "python_full_version < '3.7' and sys_platform == 'win32'" },
+    { name = "colorama", marker = "python_full_version < '3.7' and platform_system == 'Windows'" },
     { name = "importlib-resources", version = "5.4.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.7'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c1/c2/d8a40e5363fb01806870e444fc1d066282743292ff32a9da54af51ce36a2/tqdm-4.64.1.tar.gz", hash = "sha256:5f4f682a004951c1b450bc753c710e9280c5746ce6ffedee253ddbcbf54cf1e4", size = 169599 }
