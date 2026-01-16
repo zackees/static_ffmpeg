@@ -19,6 +19,9 @@ on:
         type: boolean
         default: true
 
+env:
+  COSMOCC_DIR: cosmocc/bin
+
 jobs:
   build-cosmopolitan:
     runs-on: ubuntu-22.04
@@ -46,8 +49,12 @@ jobs:
           mkdir -p cosmocc
           unzip -q "cosmocc-${COSMO_VERSION}.zip" -d cosmocc
 
-          # Add to PATH
-          echo "$PWD/cosmocc/bin" >> $GITHUB_PATH
+          # Verify tools exist and show their locations
+          echo "=== Cosmopolitan tools ==="
+          ls -la cosmocc/bin/cosmo* || true
+
+          # Add to PATH for all subsequent steps
+          echo "${{ github.workspace }}/cosmocc/bin" >> $GITHUB_PATH
 
       - name: Register APE loader
         run: |
@@ -65,19 +72,31 @@ jobs:
         run: |
           cd ffmpeg-src
 
-          export PATH="$PWD/../cosmocc/bin:$PATH"
-          export CC="cosmocc"
-          export CXX="cosmoc++"
-          export AR="cosmoar"
-          export RANLIB="cosmoranlib"
+          # Use absolute paths for Cosmopolitan tools
+          COSMO_BIN="${{ github.workspace }}/cosmocc/bin"
+          export CC="${COSMO_BIN}/cosmocc"
+          export CXX="${COSMO_BIN}/cosmoc++"
+          export AR="${COSMO_BIN}/cosmoar"
+          export RANLIB="${COSMO_BIN}/cosmoranlib"
+          export NM="${COSMO_BIN}/x86_64-unknown-cosmo-nm"
+          export STRIP="${COSMO_BIN}/x86_64-unknown-cosmo-strip"
+
+          # Verify tools exist
+          echo "CC=${CC}"
+          ls -la "${CC}" || echo "Warning: CC not found"
+          ls -la "${AR}" || echo "Warning: AR not found"
+          ls -la "${RANLIB}" || echo "Warning: RANLIB not found"
 
           if [ "${{ inputs.minimal_build }}" = "true" ]; then
-            # Minimal build - basic functionality only
+            # Minimal build - disable problematic features for Cosmopolitan
             ./configure \
-              --cc="$CC" \
-              --cxx="$CXX" \
-              --ar="$AR" \
-              --ranlib="$RANLIB" \
+              --cc="${CC}" \
+              --cxx="${CXX}" \
+              --ar="${AR}" \
+              --ranlib="${RANLIB}" \
+              --enable-cross-compile \
+              --target-os=linux \
+              --arch=x86_64 \
               --enable-static \
               --disable-shared \
               --disable-doc \
@@ -88,6 +107,9 @@ jobs:
               --disable-asm \
               --disable-x86asm \
               --disable-inline-asm \
+              --disable-pthreads \
+              --disable-w32threads \
+              --disable-os2threads \
               --enable-protocol=file \
               --enable-protocol=pipe \
               --disable-devices \
@@ -95,15 +117,20 @@ jobs:
               --enable-filter=aresample \
               --enable-filter=scale \
               --enable-filter=format \
-              --extra-cflags="-Os -fno-pie -static" \
+              --enable-filter=null \
+              --enable-filter=anull \
+              --extra-cflags="-Os -fno-pie -static -DHAVE_SYSCTL=0 -D_GNU_SOURCE" \
               --extra-ldflags="-static -fno-pie"
           else
             # Full build - may have compatibility issues
             ./configure \
-              --cc="$CC" \
-              --cxx="$CXX" \
-              --ar="$AR" \
-              --ranlib="$RANLIB" \
+              --cc="${CC}" \
+              --cxx="${CXX}" \
+              --ar="${AR}" \
+              --ranlib="${RANLIB}" \
+              --enable-cross-compile \
+              --target-os=linux \
+              --arch=x86_64 \
               --enable-gpl \
               --enable-static \
               --disable-shared \
@@ -113,15 +140,27 @@ jobs:
               --disable-asm \
               --disable-x86asm \
               --disable-inline-asm \
-              --extra-cflags="-Os -fno-pie -static" \
+              --disable-pthreads \
+              --disable-w32threads \
+              --disable-os2threads \
+              --extra-cflags="-Os -fno-pie -static -DHAVE_SYSCTL=0 -D_GNU_SOURCE" \
               --extra-ldflags="-static -fno-pie"
           fi
 
       - name: Build FFmpeg
         run: |
           cd ffmpeg-src
-          export PATH="$PWD/../cosmocc/bin:$PATH"
-          make -j$(nproc) || make -j1
+
+          # Use absolute paths for Cosmopolitan tools during build
+          COSMO_BIN="${{ github.workspace }}/cosmocc/bin"
+          export PATH="${COSMO_BIN}:$PATH"
+          export CC="${COSMO_BIN}/cosmocc"
+          export CXX="${COSMO_BIN}/cosmoc++"
+          export AR="${COSMO_BIN}/cosmoar"
+          export RANLIB="${COSMO_BIN}/cosmoranlib"
+
+          # Build with parallel jobs, show last 200 lines on failure
+          make -j$(nproc) 2>&1 || { echo "=== Build failed, retrying with single job ==="; make -j1 V=1 2>&1 | tail -200; exit 1; }
 
       - name: Package as APE binaries
         run: |
@@ -130,20 +169,29 @@ jobs:
           # Rename to .com extension for Actually Portable Executables
           if [ -f ffmpeg-src/ffmpeg ]; then
             cp ffmpeg-src/ffmpeg output/cosmopolitan/ffmpeg.com
+            echo "Created ffmpeg.com"
+          else
+            echo "Warning: ffmpeg binary not found"
           fi
+
           if [ -f ffmpeg-src/ffprobe ]; then
             cp ffmpeg-src/ffprobe output/cosmopolitan/ffprobe.com
+            echo "Created ffprobe.com"
+          else
+            echo "Warning: ffprobe binary not found"
           fi
 
-          chmod +x output/cosmopolitan/*.com || true
+          chmod +x output/cosmopolitan/*.com 2>/dev/null || true
 
-          # Try to verify (may fail in CI if APE loader not working)
+          # Show binary info
           echo "=== Binary info ==="
-          file output/cosmopolitan/*.com || true
+          file output/cosmopolitan/*.com 2>/dev/null || echo "No binaries to inspect"
           ls -la output/cosmopolitan/
 
           # Test execution if possible
-          ./output/cosmopolitan/ffmpeg.com -version || echo "Binary created but test execution failed (expected in some CI environments)"
+          if [ -f output/cosmopolitan/ffmpeg.com ]; then
+            ./output/cosmopolitan/ffmpeg.com -version || echo "Binary created but test execution failed (expected in some CI environments)"
+          fi
 
           # Create ZIP
           cd output
@@ -156,6 +204,7 @@ jobs:
           name: ffmpeg-cosmopolitan-${{ inputs.ffmpeg_version }}
           path: cosmopolitan.zip
           retention-days: 90
+          if-no-files-found: warn
 
       - name: Build notes
         run: |
