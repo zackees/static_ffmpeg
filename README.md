@@ -5,7 +5,7 @@
 
 # static-ffmpeg
 
-The easiest way to get ffmpeg v5 installed through python.
+The easiest way to get ffmpeg v8 installed through python.
 
 ## Install
 
@@ -55,10 +55,12 @@ This package is designed to allow tools that rely on `ffmpeg` to have a fully fe
 Your ffmpeg tool would have to rely on the user to install `ffmpeg`, with the right build settings to ensure your tool functions correctly. This is a major pain for ffmpeg based tools (missing codecs for example) and this library solves this problem.
 
 As of now, binaries are available for:
-  * `win32` (Windows)
-  * `darwin` (MacOS)
-  * `linux` (From Ubuntu 20LTS)
-  * Pull requests to support for other platforms are welcome! Too add support please see related git repo: [ffmpeg_bins](https://github.com/zackees/ffmpeg_bins).
+  * `win32` (Windows x64)
+  * `darwin` (macOS Intel x64)
+  * `darwin_arm64` (macOS Apple Silicon)
+  * `linux` (Linux x64, Ubuntu 20+)
+  * `linux_arm64` (Linux ARM64/aarch64)
+  * Pull requests to support for other platforms are welcome! To add support please see related git repo: [ffmpeg_bins](https://github.com/zackees/ffmpeg_bins).
 
 There is both an python api and a command line api. After installing this package the command line aliases will be available:
 
@@ -122,9 +124,14 @@ Then run `./activate.sh` to activate the shell.
 
 ## Version
 
-ffmpeg and ffprobe are both version: 5.0
+ffmpeg and ffprobe are both version: 8.0
 
 ## Release History
+  * 3.0:
+    * FFmpeg upgraded to 8.0
+    * Added ARM64 support for macOS (Apple Silicon) and Linux (aarch64)
+    * New platform keys: `darwin_arm64`, `linux_arm64`
+    * Automatic CPU architecture detection
   * 2.7: Bugfix, increase the timeout to download for slow connections to 10 minutes.
   * 2.6: Bugfix, `add_paths(...)` can now be called multiple times without polluting the os env path.
   * 2.5: `add_paths()` now has optional `weak` parameter (default False). If True then `ffmpeg/ffprobe` binaries are only only if either `ffmpeg` OR `ffprobe` doesn't already exist on path
