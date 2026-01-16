@@ -50,8 +50,21 @@ jobs:
           unzip -q "cosmocc-${COSMO_VERSION}.zip" -d cosmocc
 
           # Verify tools exist and show their locations
-          echo "=== Cosmopolitan tools ==="
-          ls -la cosmocc/bin/cosmo* || true
+          echo "=== All Cosmopolitan tools ==="
+          ls -la cosmocc/bin/ | head -50
+
+          # Create symlinks for tools that FFmpeg expects
+          cd cosmocc/bin
+          if [ ! -f cosmoranlib ] && [ -f x86_64-unknown-cosmo-ranlib ]; then
+            ln -sf x86_64-unknown-cosmo-ranlib cosmoranlib
+          fi
+          if [ ! -f cosmoranlib ]; then
+            # If no ranlib exists, create a script that uses ar -s
+            echo '#!/bin/sh' > cosmoranlib
+            echo 'exec "$(dirname "$0")/cosmoar" -s "$@"' >> cosmoranlib
+            chmod +x cosmoranlib
+          fi
+          cd ../..
 
           # Add to PATH for all subsequent steps
           echo "${{ github.workspace }}/cosmocc/bin" >> $GITHUB_PATH
@@ -119,7 +132,7 @@ jobs:
               --enable-filter=format \
               --enable-filter=null \
               --enable-filter=anull \
-              --extra-cflags="-Os -fno-pie -static -DHAVE_SYSCTL=0 -D_GNU_SOURCE" \
+              --extra-cflags="-Os -fno-pie -static -D_GNU_SOURCE" \
               --extra-ldflags="-static -fno-pie"
           else
             # Full build - may have compatibility issues
@@ -143,9 +156,14 @@ jobs:
               --disable-pthreads \
               --disable-w32threads \
               --disable-os2threads \
-              --extra-cflags="-Os -fno-pie -static -DHAVE_SYSCTL=0 -D_GNU_SOURCE" \
+              --extra-cflags="-Os -fno-pie -static -D_GNU_SOURCE" \
               --extra-ldflags="-static -fno-pie"
           fi
+
+          # Patch config.h to disable sysctl (Cosmopolitan doesn't have sys/sysctl.h)
+          echo "Patching config.h to disable HAVE_SYSCTL..."
+          sed -i 's/#define HAVE_SYSCTL 1/#define HAVE_SYSCTL 0/' config.h
+          grep HAVE_SYSCTL config.h || echo "HAVE_SYSCTL not found in config.h"
 
       - name: Build FFmpeg
         run: |
