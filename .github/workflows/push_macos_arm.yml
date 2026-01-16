@@ -1,20 +1,14 @@
-name: MacOS_Tests
+name: MacOS_ARM_Tests
 
 on: [push]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12']
-        os: [macos-latest, macos-13]
-        include:
-          - os: macos-latest
-            arch: arm64
-          - os: macos-13
-            arch: x64
     steps:
     - uses: actions/checkout@v4
       with:
@@ -27,9 +21,9 @@ jobs:
       name: Configure pip caching
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-${{ matrix.arch }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        key: ${{ runner.os }}-arm-pip-${{ hashFiles('**/pyproject.toml') }}
         restore-keys: |
-          ${{ runner.os }}-${{ matrix.arch }}-pip-
+          ${{ runner.os }}-arm-pip-
     - name: Install dependencies
       run: |
         pip install pytest

@@ -1,20 +1,14 @@
-name: Ubuntu_Tests
+name: Ubuntu_ARM_Tests
 
 on: [push]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04-arm
     strategy:
       fail-fast: false
       matrix:
         python-version: ['3.9', '3.10', '3.11', '3.12']
-        os: [ubuntu-latest, ubuntu-24.04-arm]
-        include:
-          - os: ubuntu-latest
-            arch: x64
-          - os: ubuntu-24.04-arm
-            arch: arm64
     steps:
     - uses: actions/checkout@v4
       with:
@@ -27,9 +21,9 @@ jobs:
       name: Configure pip caching
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-${{ matrix.arch }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        key: ${{ runner.os }}-arm-pip-${{ hashFiles('**/pyproject.toml') }}
         restore-keys: |
-          ${{ runner.os }}-${{ matrix.arch }}-pip-
+          ${{ runner.os }}-arm-pip-
     - name: Install dependencies
       run: |
         pip install pytest

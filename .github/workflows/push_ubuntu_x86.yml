@@ -1,10 +1,10 @@
-name: Windows_Tests
+name: Ubuntu_x86_Tests
 
 on: [push]
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -20,10 +20,10 @@ jobs:
     - uses: actions/cache@v4
       name: Configure pip caching
       with:
-        path: ~\AppData\Local\pip\Cache
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-x86-pip-${{ hashFiles('**/pyproject.toml') }}
         restore-keys: |
-          ${{ runner.os }}-pip-
+          ${{ runner.os }}-x86-pip-
     - name: Install dependencies
       run: |
         pip install pytest
