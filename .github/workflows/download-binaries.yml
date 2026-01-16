@@ -35,11 +35,11 @@ jobs:
             RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linux64-gpl.tar.xz"
           else
             # Try versioned release
-            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n${{ inputs.ffmpeg_version }}-latest-linux64-gpl.tar.xz"
+            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-n${{ inputs.ffmpeg_version }}-latest-linux64-gpl-${{ inputs.ffmpeg_version }}.tar.xz"
           fi
 
           echo "Downloading from: $RELEASE_URL"
-          curl -L -o ffmpeg.tar.xz "$RELEASE_URL" || {
+          curl -L -f -o ffmpeg.tar.xz "$RELEASE_URL" || {
             echo "Trying fallback URL..."
             curl -L -o ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linux64-gpl.tar.xz"
           }
@@ -80,11 +80,11 @@ jobs:
           if [ "${{ inputs.ffmpeg_version }}" = "latest" ]; then
             RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linuxarm64-gpl.tar.xz"
           else
-            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n${{ inputs.ffmpeg_version }}-latest-linuxarm64-gpl.tar.xz"
+            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-n${{ inputs.ffmpeg_version }}-latest-linuxarm64-gpl-${{ inputs.ffmpeg_version }}.tar.xz"
           fi
 
           echo "Downloading from: $RELEASE_URL"
-          curl -L -o ffmpeg.tar.xz "$RELEASE_URL" || {
+          curl -L -f -o ffmpeg.tar.xz "$RELEASE_URL" || {
             echo "Trying fallback URL..."
             curl -L -o ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linuxarm64-gpl.tar.xz"
           }
@@ -157,7 +157,7 @@ jobs:
           retention-days: 90
 
   download-macos-intel:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
       - name: Checkout
         uses: actions/checkout@v4
