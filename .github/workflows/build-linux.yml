@@ -1,0 +1,261 @@
+name: Build Linux FFmpeg from Source
+
+on:
+  workflow_dispatch:
+    inputs:
+      ffmpeg_version:
+        description: 'FFmpeg git tag (e.g., n7.1, n8.0)'
+        required: true
+        default: 'n8.0'
+        type: string
+      architectures:
+        description: 'Architectures to build'
+        required: true
+        type: choice
+        default: 'x64,arm64'
+        options:
+          - 'x64'
+          - 'arm64'
+          - 'x64,arm64'
+      enable_x264:
+        description: 'Enable x264 codec'
+        required: false
+        type: boolean
+        default: true
+      enable_x265:
+        description: 'Enable x265 codec'
+        required: false
+        type: boolean
+        default: true
+      enable_aac:
+        description: 'Enable AAC codec'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build-linux-x64:
+    if: contains(inputs.architectures, 'x64')
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            yasm \
+            nasm \
+            pkg-config \
+            libssl-dev \
+            zlib1g-dev \
+            git
+
+          # Codec dependencies
+          if [ "${{ inputs.enable_x264 }}" = "true" ]; then
+            sudo apt-get install -y libx264-dev
+          fi
+          if [ "${{ inputs.enable_x265 }}" = "true" ]; then
+            sudo apt-get install -y libx265-dev libnuma-dev
+          fi
+          sudo apt-get install -y \
+            libvpx-dev \
+            libopus-dev \
+            libmp3lame-dev \
+            libfdk-aac-dev
+
+      - name: Clone FFmpeg
+        run: |
+          git clone --depth 1 --branch ${{ inputs.ffmpeg_version }} https://github.com/FFmpeg/FFmpeg.git ffmpeg-src
+
+      - name: Configure FFmpeg
+        run: |
+          cd ffmpeg-src
+
+          CONFIGURE_FLAGS="
+            --prefix=/usr/local
+            --enable-gpl
+            --enable-nonfree
+            --enable-static
+            --disable-shared
+            --disable-doc
+            --disable-ffplay
+            --disable-debug
+            --extra-cflags=-Os
+          "
+
+          if [ "${{ inputs.enable_x264 }}" = "true" ]; then
+            CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libx264"
+          fi
+          if [ "${{ inputs.enable_x265 }}" = "true" ]; then
+            CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libx265"
+          fi
+          if [ "${{ inputs.enable_aac }}" = "true" ]; then
+            CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libfdk-aac"
+          fi
+
+          CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libvpx --enable-libopus --enable-libmp3lame"
+
+          ./configure $CONFIGURE_FLAGS
+
+      - name: Build FFmpeg
+        run: |
+          cd ffmpeg-src
+          make -j$(nproc)
+
+      - name: Package binaries
+        run: |
+          mkdir -p output/linux
+
+          cp ffmpeg-src/ffmpeg output/linux/
+          cp ffmpeg-src/ffprobe output/linux/
+
+          chmod +x output/linux/*
+
+          # Verify
+          ./output/linux/ffmpeg -version
+          ldd output/linux/ffmpeg || echo "Static binary (no dynamic dependencies)"
+
+          # Create ZIP
+          cd output
+          zip -r linux.zip linux/
+          mv linux.zip ../
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-built
+          path: linux.zip
+          retention-days: 90
+
+  build-linux-arm64:
+    if: contains(inputs.architectures, 'arm64')
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            yasm \
+            nasm \
+            pkg-config \
+            libssl-dev \
+            zlib1g-dev \
+            git
+
+          # Codec dependencies
+          if [ "${{ inputs.enable_x264 }}" = "true" ]; then
+            sudo apt-get install -y libx264-dev
+          fi
+          if [ "${{ inputs.enable_x265 }}" = "true" ]; then
+            sudo apt-get install -y libx265-dev libnuma-dev
+          fi
+          sudo apt-get install -y \
+            libvpx-dev \
+            libopus-dev \
+            libmp3lame-dev \
+            libfdk-aac-dev || true
+
+      - name: Clone FFmpeg
+        run: |
+          git clone --depth 1 --branch ${{ inputs.ffmpeg_version }} https://github.com/FFmpeg/FFmpeg.git ffmpeg-src
+
+      - name: Configure FFmpeg
+        run: |
+          cd ffmpeg-src
+
+          CONFIGURE_FLAGS="
+            --prefix=/usr/local
+            --enable-gpl
+            --enable-nonfree
+            --enable-static
+            --disable-shared
+            --disable-doc
+            --disable-ffplay
+            --disable-debug
+            --extra-cflags=-Os
+          "
+
+          if [ "${{ inputs.enable_x264 }}" = "true" ]; then
+            CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libx264"
+          fi
+          if [ "${{ inputs.enable_x265 }}" = "true" ]; then
+            CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libx265"
+          fi
+          if [ "${{ inputs.enable_aac }}" = "true" ]; then
+            CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libfdk-aac" || true
+          fi
+
+          CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-libvpx --enable-libopus --enable-libmp3lame"
+
+          ./configure $CONFIGURE_FLAGS || ./configure \
+            --prefix=/usr/local \
+            --enable-gpl \
+            --enable-static \
+            --disable-shared \
+            --disable-doc \
+            --disable-ffplay \
+            --disable-debug
+
+      - name: Build FFmpeg
+        run: |
+          cd ffmpeg-src
+          make -j$(nproc)
+
+      - name: Package binaries
+        run: |
+          mkdir -p output/linux_arm64
+
+          cp ffmpeg-src/ffmpeg output/linux_arm64/
+          cp ffmpeg-src/ffprobe output/linux_arm64/
+
+          chmod +x output/linux_arm64/*
+
+          # Verify
+          ./output/linux_arm64/ffmpeg -version
+
+          # Create ZIP
+          cd output
+          zip -r linux_arm64.zip linux_arm64/
+          mv linux_arm64.zip ../
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64-built
+          path: linux_arm64.zip
+          retention-days: 90
+
+  aggregate:
+    needs: [build-linux-x64, build-linux-arm64]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Organize binaries
+        run: |
+          VERSION="${{ inputs.ffmpeg_version }}"
+          mkdir -p "built-${VERSION}"
+
+          find artifacts -name "*.zip" -exec mv {} "built-${VERSION}/" \; || true
+
+          echo "=== Built binaries for ${VERSION} ==="
+          ls -la "built-${VERSION}/" || echo "No artifacts found"
+
+      - name: Upload aggregated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-built-${{ inputs.ffmpeg_version }}
+          path: built-*/
+          retention-days: 90
+          if-no-files-found: ignore

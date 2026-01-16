@@ -1,0 +1,179 @@
+name: Build Cosmopolitan FFmpeg (Experimental)
+
+on:
+  workflow_dispatch:
+    inputs:
+      cosmocc_version:
+        description: 'Cosmopolitan toolchain version'
+        required: true
+        default: '3.3.10'
+        type: string
+      ffmpeg_version:
+        description: 'FFmpeg git tag (e.g., n7.1, n8.0)'
+        required: true
+        default: 'n7.1'
+        type: string
+      minimal_build:
+        description: 'Minimal build (fewer codecs for better compatibility)'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build-cosmopolitan:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            yasm \
+            nasm \
+            git \
+            wget \
+            unzip
+
+      - name: Download Cosmopolitan toolchain
+        run: |
+          COSMO_VERSION="${{ inputs.cosmocc_version }}"
+          echo "Downloading cosmocc version ${COSMO_VERSION}..."
+
+          wget -q "https://github.com/jart/cosmopolitan/releases/download/${COSMO_VERSION}/cosmocc-${COSMO_VERSION}.zip"
+          mkdir -p cosmocc
+          unzip -q "cosmocc-${COSMO_VERSION}.zip" -d cosmocc
+
+          # Add to PATH
+          echo "$PWD/cosmocc/bin" >> $GITHUB_PATH
+
+      - name: Register APE loader
+        run: |
+          # Register the APE (Actually Portable Executable) loader
+          if [ -f cosmocc/bin/ape-x86_64.elf ]; then
+            sudo sh -c "echo ':APE:M::MZqFpD::/usr/bin/ape-x86_64.elf:' > /proc/sys/fs/binfmt_misc/register" || true
+            sudo cp cosmocc/bin/ape-x86_64.elf /usr/bin/ || true
+          fi
+
+      - name: Clone FFmpeg
+        run: |
+          git clone --depth 1 --branch ${{ inputs.ffmpeg_version }} https://github.com/FFmpeg/FFmpeg.git ffmpeg-src
+
+      - name: Configure FFmpeg for Cosmopolitan
+        run: |
+          cd ffmpeg-src
+
+          export PATH="$PWD/../cosmocc/bin:$PATH"
+          export CC="cosmocc"
+          export CXX="cosmoc++"
+          export AR="cosmoar"
+          export RANLIB="cosmoranlib"
+
+          if [ "${{ inputs.minimal_build }}" = "true" ]; then
+            # Minimal build - basic functionality only
+            ./configure \
+              --cc="$CC" \
+              --cxx="$CXX" \
+              --ar="$AR" \
+              --ranlib="$RANLIB" \
+              --enable-static \
+              --disable-shared \
+              --disable-doc \
+              --disable-ffplay \
+              --disable-network \
+              --disable-autodetect \
+              --disable-debug \
+              --disable-asm \
+              --disable-x86asm \
+              --disable-inline-asm \
+              --enable-protocol=file \
+              --enable-protocol=pipe \
+              --disable-devices \
+              --disable-filters \
+              --enable-filter=aresample \
+              --enable-filter=scale \
+              --enable-filter=format \
+              --extra-cflags="-Os -fno-pie -static" \
+              --extra-ldflags="-static -fno-pie"
+          else
+            # Full build - may have compatibility issues
+            ./configure \
+              --cc="$CC" \
+              --cxx="$CXX" \
+              --ar="$AR" \
+              --ranlib="$RANLIB" \
+              --enable-gpl \
+              --enable-static \
+              --disable-shared \
+              --disable-doc \
+              --disable-ffplay \
+              --disable-debug \
+              --disable-asm \
+              --disable-x86asm \
+              --disable-inline-asm \
+              --extra-cflags="-Os -fno-pie -static" \
+              --extra-ldflags="-static -fno-pie"
+          fi
+
+      - name: Build FFmpeg
+        run: |
+          cd ffmpeg-src
+          export PATH="$PWD/../cosmocc/bin:$PATH"
+          make -j$(nproc) || make -j1
+
+      - name: Package as APE binaries
+        run: |
+          mkdir -p output/cosmopolitan
+
+          # Rename to .com extension for Actually Portable Executables
+          if [ -f ffmpeg-src/ffmpeg ]; then
+            cp ffmpeg-src/ffmpeg output/cosmopolitan/ffmpeg.com
+          fi
+          if [ -f ffmpeg-src/ffprobe ]; then
+            cp ffmpeg-src/ffprobe output/cosmopolitan/ffprobe.com
+          fi
+
+          chmod +x output/cosmopolitan/*.com || true
+
+          # Try to verify (may fail in CI if APE loader not working)
+          echo "=== Binary info ==="
+          file output/cosmopolitan/*.com || true
+          ls -la output/cosmopolitan/
+
+          # Test execution if possible
+          ./output/cosmopolitan/ffmpeg.com -version || echo "Binary created but test execution failed (expected in some CI environments)"
+
+          # Create ZIP
+          cd output
+          zip -r cosmopolitan.zip cosmopolitan/
+          mv cosmopolitan.zip ../
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-cosmopolitan-${{ inputs.ffmpeg_version }}
+          path: cosmopolitan.zip
+          retention-days: 90
+
+      - name: Build notes
+        run: |
+          echo "=== Cosmopolitan FFmpeg Build Notes ==="
+          echo ""
+          echo "The .com files are Actually Portable Executables that can run on:"
+          echo "  - Linux (x86_64, aarch64)"
+          echo "  - macOS (x86_64, aarch64)"
+          echo "  - Windows (x86_64)"
+          echo "  - FreeBSD, NetBSD, OpenBSD"
+          echo ""
+          echo "To run on Windows, you may need to rename .com to .exe"
+          echo "On first run, the APE loader may need to extract native code"
+          echo ""
+          if [ "${{ inputs.minimal_build }}" = "true" ]; then
+            echo "This is a MINIMAL build with limited codec support"
+            echo "Only file/pipe protocols and basic filters are enabled"
+          else
+            echo "This is a FULL build with most codecs enabled"
+            echo "Some features may not work on all platforms"
+          fi

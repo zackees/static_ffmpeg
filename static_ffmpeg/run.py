@@ -3,6 +3,7 @@ Entry point for running the ffmpeg executable.
 """
 
 import os
+import platform
 import stat
 import subprocess
 import sys
@@ -23,28 +24,52 @@ LOCK_FILE = os.path.join(SELF_DIR, "lock.file")
 
 
 PLATFORM_ZIP_FILES = {
-    "win32": "https://github.com/zackees/ffmpeg_bins/raw/main/v5.0/win32.zip",
-    "darwin": "https://github.com/zackees/ffmpeg_bins/raw/main/v5.0/darwin.zip",
-    "linux": "https://github.com/zackees/ffmpeg_bins/raw/main/v5.0/linux.zip",
+    "win32": "https://github.com/zackees/ffmpeg_bins/raw/main/v8.0/win32.zip",
+    "darwin": "https://github.com/zackees/ffmpeg_bins/raw/main/v8.0/darwin.zip",
+    "darwin_arm64": "https://github.com/zackees/ffmpeg_bins/raw/main/v8.0/darwin_arm64.zip",
+    "linux": "https://github.com/zackees/ffmpeg_bins/raw/main/v8.0/linux.zip",
+    "linux_arm64": "https://github.com/zackees/ffmpeg_bins/raw/main/v8.0/linux_arm64.zip",
 }
+
+
+def get_platform_key() -> str:
+    """
+    Detect the platform and CPU architecture.
+    Returns a key matching PLATFORM_ZIP_FILES.
+    """
+    machine = platform.machine().lower()
+    is_arm = machine in ("arm64", "aarch64")
+
+    if sys.platform == "win32":
+        return "win32"
+    if sys.platform == "darwin":
+        if is_arm:
+            return "darwin_arm64"
+        return "darwin"
+    if sys.platform == "linux":
+        if is_arm:
+            return "linux_arm64"
+        return "linux"
+    return sys.platform
 
 
 def check_system() -> None:
     """Friendly error if there's a problem with the system configuration."""
-    if sys.platform not in PLATFORM_ZIP_FILES:
-        raise OSError(f"Please implement static_ffmpeg for {sys.platform}")
+    platform_key = get_platform_key()
+    if platform_key not in PLATFORM_ZIP_FILES:
+        raise OSError(f"Please implement static_ffmpeg for {platform_key}")
 
 
 def get_platform_http_zip() -> str:
     """Return the download link for the current platform"""
     check_system()
-    return PLATFORM_ZIP_FILES[sys.platform]
+    return PLATFORM_ZIP_FILES[get_platform_key()]
 
 
 def get_platform_dir() -> str:
     """Either get the executable or raise an error"""
     check_system()
-    return os.path.join(SELF_DIR, "bin", sys.platform)
+    return os.path.join(SELF_DIR, "bin", get_platform_key())
 
 
 def download_file(url: str, local_path: str) -> str:

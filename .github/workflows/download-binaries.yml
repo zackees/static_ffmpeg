@@ -1,0 +1,301 @@
+name: Download FFmpeg Binaries
+
+on:
+  workflow_dispatch:
+    inputs:
+      ffmpeg_version:
+        description: 'FFmpeg version to download'
+        required: true
+        type: choice
+        default: '8.0'
+        options:
+          - 'latest'
+          - '8.0'
+          - '7.1'
+          - '7.0'
+      upload_to_repo:
+        description: 'Commit to ffmpeg_bins repo'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  download-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Linux x64 binary
+        run: |
+          mkdir -p output/linux
+
+          # BtbN/FFmpeg-Builds - Linux x64
+          if [ "${{ inputs.ffmpeg_version }}" = "latest" ]; then
+            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linux64-gpl.tar.xz"
+          else
+            # Try versioned release
+            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n${{ inputs.ffmpeg_version }}-latest-linux64-gpl.tar.xz"
+          fi
+
+          echo "Downloading from: $RELEASE_URL"
+          curl -L -o ffmpeg.tar.xz "$RELEASE_URL" || {
+            echo "Trying fallback URL..."
+            curl -L -o ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linux64-gpl.tar.xz"
+          }
+
+          tar -xf ffmpeg.tar.xz
+          EXTRACTED_DIR=$(ls -d ffmpeg-* | head -1)
+
+          cp "$EXTRACTED_DIR/bin/ffmpeg" output/linux/
+          cp "$EXTRACTED_DIR/bin/ffprobe" output/linux/
+          chmod +x output/linux/*
+
+          # Verify binaries
+          ./output/linux/ffmpeg -version
+
+          # Create ZIP with expected structure
+          cd output
+          zip -r linux.zip linux/
+          mv linux.zip ../
+
+      - name: Upload Linux x64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64
+          path: linux.zip
+          retention-days: 90
+
+  download-linux-arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Linux ARM64 binary
+        run: |
+          mkdir -p output/linux_arm64
+
+          # BtbN/FFmpeg-Builds - Linux ARM64
+          if [ "${{ inputs.ffmpeg_version }}" = "latest" ]; then
+            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linuxarm64-gpl.tar.xz"
+          else
+            RELEASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n${{ inputs.ffmpeg_version }}-latest-linuxarm64-gpl.tar.xz"
+          fi
+
+          echo "Downloading from: $RELEASE_URL"
+          curl -L -o ffmpeg.tar.xz "$RELEASE_URL" || {
+            echo "Trying fallback URL..."
+            curl -L -o ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-linuxarm64-gpl.tar.xz"
+          }
+
+          tar -xf ffmpeg.tar.xz
+          EXTRACTED_DIR=$(ls -d ffmpeg-* | head -1)
+
+          cp "$EXTRACTED_DIR/bin/ffmpeg" output/linux_arm64/
+          cp "$EXTRACTED_DIR/bin/ffprobe" output/linux_arm64/
+          chmod +x output/linux_arm64/*
+
+          # Verify binaries
+          ./output/linux_arm64/ffmpeg -version
+
+          # Create ZIP
+          cd output
+          zip -r linux_arm64.zip linux_arm64/
+          mv linux_arm64.zip ../
+
+      - name: Upload Linux ARM64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64
+          path: linux_arm64.zip
+          retention-days: 90
+
+  download-windows-x64:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Windows x64 binary
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path output/win32
+
+          # gyan.dev Windows builds
+          if ("${{ inputs.ffmpeg_version }}" -eq "latest") {
+            $url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+          } else {
+            $url = "https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-${{ inputs.ffmpeg_version }}-essentials_build.zip"
+          }
+
+          Write-Host "Downloading from: $url"
+          try {
+            Invoke-WebRequest -Uri $url -OutFile ffmpeg.zip
+          } catch {
+            Write-Host "Trying fallback URL..."
+            Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile ffmpeg.zip
+          }
+
+          Expand-Archive -Path ffmpeg.zip -DestinationPath extracted
+          $extractedDir = Get-ChildItem -Path extracted -Directory | Select-Object -First 1
+
+          Copy-Item "$($extractedDir.FullName)/bin/ffmpeg.exe" -Destination output/win32/
+          Copy-Item "$($extractedDir.FullName)/bin/ffprobe.exe" -Destination output/win32/
+
+          # Verify binaries
+          & ./output/win32/ffmpeg.exe -version
+
+          # Create ZIP
+          Compress-Archive -Path output/win32 -DestinationPath win32.zip
+
+      - name: Upload Windows x64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64
+          path: win32.zip
+          retention-days: 90
+
+  download-macos-intel:
+    runs-on: macos-13
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download macOS Intel binary
+        run: |
+          mkdir -p output/darwin
+
+          # evermeet.cx macOS builds (Intel)
+          echo "Downloading ffmpeg..."
+          curl -L -o ffmpeg.7z "https://evermeet.cx/ffmpeg/getrelease/ffmpeg/7z"
+          7z x ffmpeg.7z -o./
+          mv ffmpeg output/darwin/
+
+          echo "Downloading ffprobe..."
+          curl -L -o ffprobe.7z "https://evermeet.cx/ffmpeg/getrelease/ffprobe/7z"
+          7z x ffprobe.7z -o./
+          mv ffprobe output/darwin/
+
+          chmod +x output/darwin/*
+
+          # Verify binaries
+          ./output/darwin/ffmpeg -version
+
+          # Create ZIP
+          cd output
+          zip -r darwin.zip darwin/
+          mv darwin.zip ../
+
+      - name: Upload macOS Intel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-intel
+          path: darwin.zip
+          retention-days: 90
+
+  download-macos-arm64:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download macOS ARM64 binary
+        run: |
+          mkdir -p output/darwin_arm64
+
+          # Try martin-riedl.de first for ARM64 builds
+          echo "Downloading ffmpeg for macOS ARM64..."
+
+          # osxexperts.net provides universal binaries that work on ARM
+          curl -L -o ffmpeg.zip "https://www.osxexperts.net/ffmpeg7arm.zip" || {
+            echo "Trying alternative source..."
+            # Fallback: Build from Homebrew bottle or use evermeet universal
+            brew install ffmpeg
+            cp $(which ffmpeg) output/darwin_arm64/
+            cp $(which ffprobe) output/darwin_arm64/
+          }
+
+          if [ -f ffmpeg.zip ]; then
+            unzip ffmpeg.zip
+            mv ffmpeg output/darwin_arm64/
+
+            curl -L -o ffprobe.zip "https://www.osxexperts.net/ffprobe7arm.zip" || true
+            if [ -f ffprobe.zip ]; then
+              unzip ffprobe.zip
+              mv ffprobe output/darwin_arm64/
+            else
+              # If ffprobe not available, get from Homebrew
+              brew install ffmpeg
+              cp $(which ffprobe) output/darwin_arm64/
+            fi
+          fi
+
+          chmod +x output/darwin_arm64/*
+
+          # Verify binaries
+          ./output/darwin_arm64/ffmpeg -version
+
+          # Create ZIP
+          cd output
+          zip -r darwin_arm64.zip darwin_arm64/
+          mv darwin_arm64.zip ../
+
+      - name: Upload macOS ARM64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-arm64
+          path: darwin_arm64.zip
+          retention-days: 90
+
+  aggregate-binaries:
+    needs: [download-linux-x64, download-linux-arm64, download-windows-x64, download-macos-intel, download-macos-arm64]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Organize binaries
+        run: |
+          VERSION="${{ inputs.ffmpeg_version }}"
+          if [ "$VERSION" = "latest" ]; then
+            VERSION="8.0"
+          fi
+
+          mkdir -p "v${VERSION}"
+
+          # Move all ZIP files to versioned folder
+          find artifacts -name "*.zip" -exec mv {} "v${VERSION}/" \;
+
+          # List contents
+          echo "=== Aggregated binaries for v${VERSION} ==="
+          ls -la "v${VERSION}/"
+
+          # Verify ZIP structure
+          for zip in v${VERSION}/*.zip; do
+            echo "Contents of $zip:"
+            unzip -l "$zip"
+          done
+
+      - name: Upload aggregated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-binaries-v${{ inputs.ffmpeg_version }}
+          path: v*/
+          retention-days: 90
+
+      - name: Commit to ffmpeg_bins repo
+        if: ${{ inputs.upload_to_repo }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.FFMPEG_BINS_TOKEN }}
+        run: |
+          VERSION="${{ inputs.ffmpeg_version }}"
+          if [ "$VERSION" = "latest" ]; then
+            VERSION="8.0"
+          fi
+
+          echo "Would commit to ffmpeg_bins repo at v${VERSION}/"
+          echo "Note: This requires FFMPEG_BINS_TOKEN secret to be configured"
+          echo "Manual copy is recommended for now"
