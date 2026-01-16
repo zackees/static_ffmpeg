@@ -1,7 +1,9 @@
 
-[![Actions Status](https://github.com/zackees/static_ffmpeg/workflows/MacOS_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_macos.yml)
-[![Actions Status](https://github.com/zackees/static_ffmpeg/workflows/Win_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_win.yml)
-[![Actions Status](https://github.com/zackees/static_ffmpeg/workflows/Ubuntu_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_ubuntu.yml)
+[![MacOS x86](https://github.com/zackees/static_ffmpeg/workflows/MacOS_x86_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_macos_x86.yml)
+[![MacOS ARM](https://github.com/zackees/static_ffmpeg/workflows/MacOS_ARM_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_macos_arm.yml)
+[![Ubuntu x86](https://github.com/zackees/static_ffmpeg/workflows/Ubuntu_x86_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_ubuntu_x86.yml)
+[![Ubuntu ARM](https://github.com/zackees/static_ffmpeg/workflows/Ubuntu_ARM_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_ubuntu_arm.yml)
+[![Windows](https://github.com/zackees/static_ffmpeg/workflows/Windows_Tests/badge.svg)](https://github.com/zackees/static_ffmpeg/actions/workflows/push_win.yml)
 
 # static-ffmpeg
 
