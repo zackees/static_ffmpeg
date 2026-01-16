@@ -1,0 +1,3 @@
+[submodule "ffmpeg_bins"]
+	path = ffmpeg_bins
+	url = https://github.com/zackees/ffmpeg_bins.git
