@@ -6,25 +6,33 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        python-version: [3.9, 3.10.8, 3.11]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
         os: [windows-latest]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       name: Configure pip caching
       with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
         restore-keys: |
           ${{ runner.os }}-pip-
     - name: Install dependencies
       run: |
-        pip install -e '.[test]'
+        pip install pytest
+        pip install -e .
+    - name: Show platform info
+      run: |
+        python -c "import platform; print(f'Architecture: {platform.machine()}')"
+        python -c "import sys; print(f'Platform: {sys.platform}')"
     - name: Run tests
       run: |
-        pytest
+        pytest -v
