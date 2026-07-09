@@ -54,21 +54,21 @@
         {
           "platform": { "os": "linux", "arch": "x86_64", "libc": "glibc" },
           "asset": {
-            "filename": "linux_x64_glibc217.zip",
+            "filename": "linux_x64.zip",
             "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
             "size_bytes": 0,
             "media_type": "application/zip",
-            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_x64_glibc217.zip"]
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_x64.zip"]
           }
         },
         {
           "platform": { "os": "linux", "arch": "arm64", "libc": "glibc" },
           "asset": {
-            "filename": "linux_arm64_glibc217.zip",
+            "filename": "linux_arm64.zip",
             "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
             "size_bytes": 0,
             "media_type": "application/zip",
-            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_arm64_glibc217.zip"]
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_arm64.zip"]
           }
         },
         {

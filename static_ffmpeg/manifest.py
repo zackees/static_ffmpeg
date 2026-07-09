@@ -34,10 +34,13 @@ from typing import Dict, List, NamedTuple, Optional
 
 import requests  # type: ignore
 
-# Empty by default: current/legacy behaviour is preserved byte-for-byte until
-# ffmpeg-bins2 + CDN are live. Override via the environment for early adopters
-# and tests, or set this constant once the catalog is published.
-DEFAULT_MANIFEST_URL = ""
+# Published ffmpeg-bins2 catalog. Resolution is still best-effort: platforms not
+# listed here (currently Windows and musl -- pending forge build fixes) and any
+# fetch/parse failure fall back to the legacy hard-coded URLs, so existing and
+# unlisted-platform installs are never broken. Override via the environment.
+DEFAULT_MANIFEST_URL = (
+    "https://raw.githubusercontent.com/zackees/ffmpeg-bins2/main/manifest.json"
+)
 
 # The channel a fresh install pulls from. Existing installs pin their resolved
 # version in installed.crumb and are never silently upgraded.

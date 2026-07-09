@@ -109,7 +109,11 @@ class ManifestTester(unittest.TestCase):
         # An empty manifest URL means resolution is disabled: it must be a
         # no-op that returns None so the caller falls back to the legacy URL.
         self.assertIsNone(manifest.resolve_asset(url=""))
-        self.assertEqual(manifest.DEFAULT_MANIFEST_URL, "")
+
+    def test_default_manifest_url_points_at_ffmpeg_bins2(self) -> None:
+        # The published catalog is the ffmpeg-bins2 manifest.
+        self.assertIn("ffmpeg-bins2", manifest.DEFAULT_MANIFEST_URL)
+        self.assertTrue(manifest.DEFAULT_MANIFEST_URL.endswith("manifest.json"))
 
     def test_example_manifest_resolves_all_eight_targets(self) -> None:
         # The shipped example manifest documents the client contract; every one
