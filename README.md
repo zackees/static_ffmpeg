@@ -101,7 +101,32 @@ subprocess.check_output([ffmpeg, "-version"])
 subprocess.check_output([ffprobe, "-version"])
 ```
 
+## Binary resolution & backward compatibility
 
+By default `static-ffmpeg` downloads the same per-platform zips it always has,
+from the frozen [`ffmpeg_bins`](https://github.com/zackees/ffmpeg_bins) repo, so
+**existing installs keep resolving to the exact same URLs** — those are never
+moved.
+
+New installs can additionally resolve binaries through a
+[`manifest.json`](https://github.com/zackees/manifest.json) catalog, which lets
+the download source, versions, and integrity hashes change without a client
+release. The client detects a platform tuple (`os` / `arch` / `libc`, so glibc
+and musl Linux builds are distinguished), resolves it against the catalog, and
+verifies the artifact's `sha256` before use. If the manifest is disabled,
+unreachable, or does not describe the current platform, it falls back to the
+legacy URL — resolution is never worse than before.
+
+Manifest resolution is opt-in until the `ffmpeg-bins2` catalog + CDN are live.
+Point it at a catalog with:
+
+```bash
+export STATIC_FFMPEG_MANIFEST_URL="https://<cdn>/ffmpeg/manifest.json"
+```
+
+See [`manifest.example.json`](manifest.example.json) for the catalog format and
+[issue #20](https://github.com/zackees/static_ffmpeg/issues/20) for the full
+migration plan.
 
 ## Testing
 

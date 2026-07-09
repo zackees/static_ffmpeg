@@ -9,12 +9,14 @@ import subprocess
 import sys
 import zipfile
 from datetime import datetime
-from typing import Tuple
+from typing import Optional, Tuple
 
 import requests  # type: ignore
 from filelock import FileLock, Timeout
 from progress.bar import Bar  # type: ignore
 from progress.spinner import Spinner  # type: ignore
+
+from static_ffmpeg import manifest
 
 TIMEOUT = 10 * 60  # Wait upto 10 minutes to validate install
 # otherwise break the lock and install anyway.
@@ -61,9 +63,36 @@ def check_system() -> None:
 
 
 def get_platform_http_zip() -> str:
-    """Return the download link for the current platform"""
+    """Return the legacy download link for the current platform.
+
+    Kept for backward compatibility: this is the exact URL that older installs
+    resolve to, and it must never move. New code should prefer
+    :func:`resolve_platform_download`, which layers manifest resolution on top
+    of this with a guaranteed fallback here.
+    """
     check_system()
     return PLATFORM_ZIP_FILES[get_platform_key()]
+
+
+def resolve_platform_download() -> Tuple[str, Optional[str]]:
+    """Resolve the download URL (and optional sha256) for this platform.
+
+    Tries the manifest catalog first (best effort, opt-in until ffmpeg-bins2 and
+    its CDN are live). On any failure -- disabled, unreachable, malformed, or a
+    platform the manifest does not describe -- it falls back to the legacy
+    hard-coded URL so behaviour is never worse than today and old installs are
+    never disturbed. Returns ``(url, expected_sha256_or_None)``.
+    """
+    try:
+        asset = manifest.resolve_asset()
+    except Exception as err:  # pylint: disable=broad-except
+        # Manifest resolution is strictly best-effort; never let it break a
+        # download that legacy behaviour could satisfy.
+        print(f"{__file__}: manifest resolution failed ({err}); using legacy URL")
+        asset = None
+    if asset is not None:
+        return asset.url, asset.sha256
+    return get_platform_http_zip(), None
 
 
 def get_platform_dir() -> str:
@@ -72,8 +101,15 @@ def get_platform_dir() -> str:
     return os.path.join(SELF_DIR, "bin", get_platform_key())
 
 
-def download_file(url: str, local_path: str) -> str:
-    """Downloads a file to the give path."""
+def download_file(
+    url: str, local_path: str, expected_sha256: Optional[str] = None
+) -> str:
+    """Downloads a file to the give path.
+
+    If ``expected_sha256`` is provided, the downloaded file is verified against
+    it and a ``ValueError`` is raised on mismatch (the corrupt file is removed).
+    Legacy downloads pass ``None`` and are not checksum-verified.
+    """
     # NOTE the stream=True parameter below
     print(f"Downloading {url} -> {local_path}")
     chunk_size = (1024 * 1024) // 4
@@ -92,6 +128,15 @@ def download_file(url: str, local_path: str) -> str:
                     file_d.write(chunk)
                     spinner.next(len(chunk))
             sys.stdout.write(f"\nDownload of {url} -> {local_path} completed.\n")
+    if expected_sha256:
+        try:
+            manifest.verify_sha256(local_path, expected_sha256)
+        except ValueError:
+            try:
+                os.remove(local_path)
+            except OSError:
+                pass
+            raise
     return local_path
 
 
@@ -118,6 +163,8 @@ def _get_or_fetch_platform_executables_else_raise_no_lock(
     fix_permissions=True, download_dir=None
 ) -> Tuple[str, str]:
     """Either get the executable or raise an error, internal api"""
+    # pylint: disable=too-many-locals
+
     exe_dir = download_dir if download_dir else get_platform_dir()
     installed_crumb = os.path.join(exe_dir, "installed.crumb")
     if not os.path.exists(installed_crumb):
@@ -126,9 +173,9 @@ def _get_or_fetch_platform_executables_else_raise_no_lock(
         # the install one level up from that same directory.
         install_dir = os.path.dirname(exe_dir)
         os.makedirs(exe_dir, exist_ok=True)
-        url = get_platform_http_zip()
+        url, expected_sha256 = resolve_platform_download()
         local_zip = exe_dir + ".zip"
-        download_file(url, local_zip)
+        download_file(url, local_zip, expected_sha256=expected_sha256)
         print(f"Extracting {local_zip} -> {install_dir}")
         with zipfile.ZipFile(local_zip, mode="r") as zipf:
             zipf.extractall(install_dir)

@@ -1,0 +1,97 @@
+{
+  "kind": "Catalog",
+  "schema_version": 1,
+  "tool": "ffmpeg",
+  "_comment": "Example ffmpeg catalog in the zackees/manifest.json Catalog format. This documents the exact contract static_ffmpeg/manifest.py resolves against. urls[] point at a CDN-fronted www site (no bandwidth limits); sha256 is verified by the client after download. Replace <cdn>, versions, sizes and hashes with real published values in ffmpeg-bins2.",
+  "channels": {
+    "latest-stable": "8.0.0"
+  },
+  "releases": [
+    {
+      "version": "8.0.0",
+      "published_at": "2026-01-01T00:00:00Z",
+      "platforms": [
+        {
+          "platform": { "os": "windows", "arch": "x86_64" },
+          "asset": {
+            "filename": "win_x64.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/win_x64.zip"]
+          }
+        },
+        {
+          "platform": { "os": "windows", "arch": "arm64" },
+          "asset": {
+            "filename": "win_arm64.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/win_arm64.zip"]
+          }
+        },
+        {
+          "platform": { "os": "macos", "arch": "x86_64" },
+          "asset": {
+            "filename": "darwin_x64.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/darwin_x64.zip"]
+          }
+        },
+        {
+          "platform": { "os": "macos", "arch": "arm64" },
+          "asset": {
+            "filename": "darwin_arm64.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/darwin_arm64.zip"]
+          }
+        },
+        {
+          "platform": { "os": "linux", "arch": "x86_64", "libc": "glibc" },
+          "asset": {
+            "filename": "linux_x64_glibc217.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_x64_glibc217.zip"]
+          }
+        },
+        {
+          "platform": { "os": "linux", "arch": "arm64", "libc": "glibc" },
+          "asset": {
+            "filename": "linux_arm64_glibc217.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_arm64_glibc217.zip"]
+          }
+        },
+        {
+          "platform": { "os": "linux", "arch": "x86_64", "libc": "musl" },
+          "asset": {
+            "filename": "linux_x64_musl.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_x64_musl.zip"]
+          }
+        },
+        {
+          "platform": { "os": "linux", "arch": "arm64", "libc": "musl" },
+          "asset": {
+            "filename": "linux_arm64_musl.zip",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "size_bytes": 0,
+            "media_type": "application/zip",
+            "urls": ["https://<cdn>/ffmpeg/8.0.0/linux_arm64_musl.zip"]
+          }
+        }
+      ]
+    }
+  ]
+}
